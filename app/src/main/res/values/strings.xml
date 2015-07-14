@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Meditation</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="about_text">Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.
+The following meditation exercises are intended for both beginners and advanced practitioners of meditation, and is performed through the respiration. Release pent-up anger, fears, stress, etc. during daily life, individually or in small groups – at the beach, at work, at home, in the conference room, in school before classes, before major exams, and so on.
+The exercises, of varying durations, are guided by Prof. Jacob Raz, an author, researcher, and meditation practitioner, who has led meditation groups for 25 years.
+This is a “mindfulness” meditation, including only vocal guidance, without background sounds. This serves to help you connect more fully, attentively and alertly to your immediate surroundings. In order to enjoy other background sounds, you should turn off the vocal instructions.
+We recommend sitting comfortably, preferably on a cushion or pillow so your knees lightly touch the floor. We also recommend you switch your phone to “do not disturb” mode and breathe…
+    </string>
+    <string name="minute">min</string>
+    <string name="kids">kids</string>
+</resources>
