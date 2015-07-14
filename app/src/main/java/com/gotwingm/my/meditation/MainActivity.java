@@ -3,18 +3,7 @@ package com.gotwingm.my.meditation;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.media.Image;
 import android.os.Bundle;
-import android.text.method.MovementMethod;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,9 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 
@@ -36,9 +23,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     ViewFlipper aboutViewFlipper;
     LayoutInflater mLayoutInflater;
     Context mContext;
-
     float fromX;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

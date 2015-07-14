@@ -6,6 +6,11 @@
     tools:context=".MainActivity"
     android:background="@drawable/noon_still">
 
+    <!--<SurfaceView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:id="@+id/backgroundVideoSurface"/>-->
+
     <ViewFlipper
         android:id="@+id/mainViewFlipper"
         android:layout_width="fill_parent"
