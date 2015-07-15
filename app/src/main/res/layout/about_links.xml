@@ -10,50 +10,71 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="About Mindfulness"
+        android:text="@string/further_reading"
         android:id="@+id/textView2"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="28dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView3"
-        android:clickable="true"/>
+        android:text="@string/link_name0"
+        android:id="@+id/link0"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:clickable="true" />
+        android:text="@string/link_name1"
+        android:id="@+id/link1"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView4"
-        android:clickable="true" />
+        android:text="@string/link_name2"
+        android:id="@+id/link2"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView5"
-        android:clickable="true"/>
+        android:text="@string/link_name3"
+        android:id="@+id/link3"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView6"
-        android:clickable="true"/>
+        android:text="@string/link_name4"
+        android:id="@+id/link4"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="New Text"
-        android:id="@+id/textView7"
-        android:clickable="true"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/link_name5"
+        android:id="@+id/link5"
+        android:clickable="true"
+        android:layout_margin="5dp"
+        android:textColor="#ff0054ff"
+        android:onClick="onClick"/>
 
 </LinearLayout>

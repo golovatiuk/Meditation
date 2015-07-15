@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,8 +12,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends Activity implements View.OnClickListener{
@@ -40,14 +46,56 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         makeAboutFlipper();
 
-        ((ImageView) findViewById(R.id.aboutBottomBarIndicator1)).setImageResource(R.drawable.indicator_activ);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
+            case R.id.link0:
+
+                openLinks(0, R.id.link0);
+
+                break;
+
+            case R.id.link1:
+
+                openLinks(1, R.id.link1);
+
+                break;
+
+            case R.id.link2:
+
+                openLinks(2, R.id.link2);
+
+                break;
+
+            case R.id.link3:
+
+                openLinks(3, R.id.link3);
+
+                break;
+
+            case R.id.link4:
+
+                openLinks(4, R.id.link4);
+
+                break;
+
+            case R.id.link5:
+
+                openLinks(5, R.id.link5);
+
+                break;
+
+            case R.id.browserCloseButton:
+
+                mainViewFlipper.showPrevious();
+
+                mainViewFlipper.removeViewAt(1);
+
+                break;
+
             case R.id.aboutViewCloseImageButton:
 
                 mainViewFlipper.addView(mLayoutInflater.inflate(R.layout.main_screen, null));
@@ -178,10 +226,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     private void makeAboutFlipper() {
 
+//        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutTextScrollView);
+
         ((ImageView) findViewById(R.id.aboutBottomBarIndicator1)).setImageResource(R.drawable.indicator_activ);
         ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator);
         ((ImageView) findViewById(R.id.aboutBottomBarIndicator3)).setImageResource(R.drawable.indicator);
-
 
         aboutViewFlipper = (ViewFlipper) findViewById(R.id.aboutViewFlipper);
 
@@ -224,4 +273,30 @@ public class MainActivity extends Activity implements View.OnClickListener{
         }
     }
 
+    private void openLinks(int index, int id) {
+
+        String[] linksArray = getResources().getStringArray(R.array.links);
+
+        mainViewFlipper.addView(mLayoutInflater.inflate(R.layout.browser_view, null));
+        mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.sett_bar_in));
+        mainViewFlipper.showNext();
+
+        WebView webView = (WebView) findViewById(R.id.browserWebView);
+        ((TextView) findViewById(R.id.browserTitle)).setText(((TextView) findViewById(id)).getText());
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.setWebViewClient(new MyBrowser());
+        webView.loadUrl(linksArray[index]);
+
+    }
+
+    private class MyBrowser extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 }

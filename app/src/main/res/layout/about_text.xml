@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:text="@string/about_text"
-        android:id="@+id/aboutText"
-        android:gravity="center"
-        android:scrollbars="vertical"/>
+    <!--<ScrollView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:id="@+id/aboutTextScrollView"-->
+        <!--android:scrollbars="none"-->
+        <!--android:fillViewport="false"-->
+        <!--android:nestedScrollingEnabled="true">-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_text"
+            android:id="@+id/aboutText"
+            android:textStyle="bold"/>
+    <!--</ScrollView>-->
 
 </RelativeLayout>

@@ -4,12 +4,36 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="about_text">Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.
-The following meditation exercises are intended for both beginners and advanced practitioners of meditation, and is performed through the respiration. Release pent-up anger, fears, stress, etc. during daily life, individually or in small groups – at the beach, at work, at home, in the conference room, in school before classes, before major exams, and so on.
-The exercises, of varying durations, are guided by Prof. Jacob Raz, an author, researcher, and meditation practitioner, who has led meditation groups for 25 years.
-This is a “mindfulness” meditation, including only vocal guidance, without background sounds. This serves to help you connect more fully, attentively and alertly to your immediate surroundings. In order to enjoy other background sounds, you should turn off the vocal instructions.
+    <string name="about_text">
+Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.\n\n
+The following meditation exercises are intended for both beginners and advanced practitioners of meditation, and is performed through the respiration. Release pent-up anger, fears, stress, etc. during daily life, individually or in small groups – at the beach, at work, at home, in the conference room, in school before classes, before major exams, and so on.\n\n
+The exercises, of varying durations, are guided by Prof. Jacob Raz, an author, researcher, and meditation practitioner, who has led meditation groups for 25 years.\n\n
+This is a “mindfulness” meditation, including only vocal guidance, without background sounds. This serves to help you connect more fully, attentively and alertly to your immediate surroundings. In order to enjoy other background sounds, you should turn off the vocal instructions.\n\n
 We recommend sitting comfortably, preferably on a cushion or pillow so your knees lightly touch the floor. We also recommend you switch your phone to “do not disturb” mode and breathe…
     </string>
     <string name="minute">min</string>
     <string name="kids">kids</string>
+
+    <string name="further_reading">Further Reading</string>
+    <string name="link_name0">About Mindfulness</string>
+    <string name="link_name1">The Oxford Mindfulness Centre</string>
+    <string name="link_name2">The science behind meditation</string>
+    <string name="link_name3">Meditation affects heart, brain and creativity</string>
+    <string name="link_name4">Scientific Research on Meditation</string>
+    <string name="link_name5">Researching Meditation</string>
+
+    <string-array name="links">
+        <item>http://en.m.wikipedia.org/wiki/Mindfulness</item>
+        <item>http://www.oxfordmindfulness.org/</item>
+        <item>http://io9.com/how-meditation-changes-your-brain-and-makes-you-feel-b-470030863</item>
+        <item>http://blog.ted.com/2013/01/11/4-scientific-studies-on-how-meditation-can-affect-your-heart-brain-and-creativity/</item>
+        <item>http://www.rigpa.org/ndex.php?option=com_content&amp;view=article&amp;id=35\%%3Ascientific-research-on-meditation&amp;catid=63\%%3Aessential-teachings&amp;Itemid=154</item>
+        <item>http://www.researchingmeditation.org/</item>
+    </string-array>
+
+    <string name="aboutLabel">More</string>
+    <string name="languageSettingsLabel">Language</string>
+    <string name="shareLabel">Share</string>
+    <string name="reminderLabel">Reminders</string>
+
 </resources>

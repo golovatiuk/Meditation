@@ -16,7 +16,7 @@ public class BackgroundVideoManager extends MainActivity implements SurfaceHolde
 
     BackgroundVideoManager() {
 
-        mSurfaceView = (SurfaceView) findViewById(R.id.backgroundVideoSurface);
+//        mSurfaceView = (SurfaceView) findViewById(R.id.backgroundVideoSurface);
         mSurfaceHolder = mSurfaceView.getHolder();
         mMediaPlayer = new MediaPlayer();
 
