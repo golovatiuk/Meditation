@@ -3,40 +3,46 @@
     android:layout_width="fill_parent" android:layout_height="wrap_content"
     android:background="#2cff0000">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:paddingRight="20dp"
+        >
 
+        <ImageButton
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:id="@+id/meditationSettBarOKButton"
+            android:src="@android:drawable/checkbox_on_background"
+            android:background="@drawable/main_drawer_chosen_button_background"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/meditationSettBarXButton"
+            android:layout_toStartOf="@+id/meditationSettBarXButton"
+            android:layout_marginRight="20dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <ImageButton
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:id="@+id/meditationSettBarXButton"
+            android:src="@drawable/x"
+            android:background="@drawable/main_drawer_button_background"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/textView30"
+            android:layout_toStartOf="@+id/textView30"
+            android:layout_marginRight="20dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton5"
-                android:src="@drawable/bird"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/imageButton6"
-                android:layout_toStartOf="@+id/imageButton6" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageButton6"
-                android:src="@drawable/music"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
-
-        </RelativeLayout>
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/volumeProgressBar" />
-    </LinearLayout>
+            android:text="@string/guidance"
+            android:id="@+id/textView30"
+            android:textColor="#ff000000"
+            android:textSize="28sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
 </ViewFlipper>

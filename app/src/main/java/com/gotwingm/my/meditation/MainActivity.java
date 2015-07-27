@@ -1,35 +1,49 @@
 package com.gotwingm.my.meditation;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.ViewFlipper;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
-    private static int timer;
+    public static int timer;
+    public static String STRING_EXTRA = "string extra";
+    public static String TIME_EXTRA = "time";
 
-    ViewFlipper mainViewFlipper;
-    ViewFlipper aboutViewFlipper;
-    LayoutInflater mLayoutInflater;
-    Context mContext;
-    float fromX;
+    private Locale mLocale;
+    private String locale;
+//    private VideoView mVideoView;
+//    private Uri video;
+
+    RemindersManager mRemindersManager;
+    AboutViewManager mAboutViewManager;
+    MeditationManger mMeditationManger;
+
+    public static View activityMain;
+    public static ViewFlipper mainViewFlipper;
+    public static LayoutInflater layoutInflater;
+    public static View aboutView;
+    public static View remindersView;
+    public static View mainView;
+    public static View meditationView;
+    public static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +54,36 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        mContext = getApplicationContext();
-        mainViewFlipper = (ViewFlipper) findViewById(R.id.mainViewFlipper);
-        mLayoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//        setBackgroundVideo();
 
-        makeAboutFlipper();
+        context = MainActivity.this;
+        layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        mainViewFlipper = (ViewFlipper) findViewById(R.id.mainViewFlipper);
+
+        activityMain = layoutInflater.inflate(R.layout.activity_main, null);
+        aboutView = layoutInflater.inflate(R.layout.about_view, null);
+        mainView = layoutInflater.inflate(R.layout.main_view, null);
+        remindersView = layoutInflater.inflate(R.layout.reminders_view, null);
+        meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
+
+
+        mRemindersManager = new RemindersManager();
+        mAboutViewManager = new AboutViewManager();
+        mMeditationManger = new MeditationManger();
+
+        Intent intent = getIntent();
+
+        if (!TextUtils.isEmpty(intent.getStringExtra(STRING_EXTRA))) {
+
+            timer = intent.getIntExtra(TIME_EXTRA, 1);
+            makeMainView();
+
+        } else {
+
+            mAboutViewManager.makeAboutView();
+
+        }
+
 
     }
 
@@ -52,84 +91,124 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.link0:
+            case R.id.settingsInfoButton:
 
-                openLinks(0, R.id.link0);
+                mAboutViewManager.makeAboutView();
 
-                break;
-
-            case R.id.link1:
-
-                openLinks(1, R.id.link1);
+                mainViewFlipper.showNext();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
-            case R.id.link2:
+            case R.id.settingsLanguageButton:
 
-                openLinks(2, R.id.link2);
-
-                break;
-
-            case R.id.link3:
-
-                openLinks(3, R.id.link3);
+                mainViewFlipper.addView(layoutInflater.inflate(R.layout.settings_language_view, null));
+                mainViewFlipper.showNext();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
-            case R.id.link4:
+            case R.id.englishSettingsButton:
 
-                openLinks(4, R.id.link4);
+                changeLocation(v);
 
                 break;
 
-            case R.id.link5:
+            case R.id.alephSettingsButton:
 
-                openLinks(5, R.id.link5);
+                changeLocation(v);
+
+                break;
+
+            case R.id.settingsLanguageCloseButton:
+
+                makeMainView();
+
+                break;
+
+            case R.id.settingsShareButton:
+
+                mainViewFlipper.addView(layoutInflater.inflate(R.layout.share_view, null));
+                mainViewFlipper.showNext();
+                mainViewFlipper.removeViewAt(0);
+
+                break;
+
+            case R.id.shareCloseButton:
+
+                makeMainView();
+
+                break;
+
+            case R.id.facebookShareButton:
+
+                share(R.id.facebookShareButton);
+
+                break;
+
+            case R.id.twitterShareButton:
+
+                share(R.id.twitterShareButton);
+
+                break;
+
+            case R.id.settingsRemindersButton:
+
+                mRemindersManager.makeRemindersView();
+
+                break;
+
+            case R.id.remindersManagerCloseButton:
+
+                mRemindersManager.createAlarms();
+                makeMainView();
 
                 break;
 
             case R.id.browserCloseButton:
 
                 mainViewFlipper.showPrevious();
-
                 mainViewFlipper.removeViewAt(1);
 
                 break;
 
-            case R.id.aboutViewCloseImageButton:
+            case R.id.aboutViewCloseButton:
 
-                mainViewFlipper.addView(mLayoutInflater.inflate(R.layout.main_screen, null));
-
-                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_next_in));
-                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_next_out));
-                mainViewFlipper.showNext();
-
-                aboutViewFlipper.removeAllViews();
+                makeMainView();
+                mAboutViewManager.aboutViewFlipper.removeAllViews();
 
                 break;
 
             case R.id.mainScreenLogo:
 
-                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_prev_in));
-                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_prev_out));
-                mainViewFlipper.showPrevious();
-
-                ViewFlipper settingsFlipper2 = (ViewFlipper) findViewById(R.id.settingsFlipper);
-                settingsFlipper2.removeAllViews();
-                makeAboutFlipper();
+                mAboutViewManager.makeAboutView();
+                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
+                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
+                mainViewFlipper.showNext();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
-            case R.id.mainScreenBackButton:
+            case R.id.closeButton:
+
                 finish();
 
-            case R.id.mainSettingsButton:
+            case R.id.meditationSettingsButton:
 
                 ViewFlipper settingsFlipper = (ViewFlipper) findViewById(R.id.settingsFlipper);
 
-                settingsFlipper.addView(mLayoutInflater.inflate(R.layout.main_settings_bar, null));
-                settingsFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.sett_bar_in));
+                settingsFlipper.addView(layoutInflater.inflate(R.layout.main_settings_bar, null));
+                settingsFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_in));
                 settingsFlipper.showNext();
+
+                break;
+
+            case R.id.meditationBackButton:
+
+                makeMainView();
+                mMeditationManger.stop();
+                mMeditationManger.progressBarWork = false;
+                mMeditationManger.mLinearLayout.removeAllViews();
 
                 break;
 
@@ -137,11 +216,15 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
                 timer = 1;
 
+                mMeditationManger.makeMeditationView();
+
                 break;
 
             case R.id.min5:
 
                 timer = 5;
+
+                mMeditationManger.makeMeditationView();
 
                 break;
 
@@ -149,154 +232,127 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
                 timer = 10;
 
+                mMeditationManger.makeMeditationView();
+
                 break;
 
             case R.id.min20:
 
                 timer = 20;
 
+                mMeditationManger.makeMeditationView();
+
                 break;
 
             case R.id.kids:
 
-                timer = 5;
+                timer = 0;
+
+                mMeditationManger.makeMeditationView();
 
                 break;
         }
     }
 
-    public ViewGroup.OnTouchListener setAboutViewFlipperOnTouchListener() {
+    public void makeMainView() {
 
-        return new ViewGroup.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+        mainViewFlipper.addView(layoutInflater.inflate(R.layout.main_view, null));
 
-                switch (event.getAction())
-                {
-                    case MotionEvent.ACTION_DOWN:
-                        fromX = event.getX();
+        mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
+        mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_out));
+        mainViewFlipper.showNext();
+
+        mainViewFlipper.removeViewAt(0);
+
+    }
+
+    private void share (int id) {
+
+        final String FACEBOOK_LAUNCHER = "com.facebook.katana";
+        final String TWITTER_LAUNCHER = "com.twitter.android.PostActivity";
+
+        String text = ((EditText) findViewById(R.id.shareMessageEditText)).getText().toString();
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        List<ResolveInfo> activitiesList = getPackageManager().queryIntentActivities(shareIntent, 0);
+
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+        shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+        switch (id)
+        {
+            case R.id.facebookShareButton:
+
+                for (ResolveInfo info : activitiesList) {
+
+                    if (info.activityInfo.packageName.toLowerCase().startsWith(FACEBOOK_LAUNCHER)) {
+
+                        ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+
+                        shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        shareIntent.setComponent(componentName);
+                        startActivity(shareIntent);
 
                         break;
-
-                    case MotionEvent.ACTION_UP:
-
-                        float toX = event.getX();
-
-                        if (fromX > toX) {
-
-                            if (aboutViewFlipper.getDisplayedChild() == 2) {
-
-                                break;
-
-                            }
-
-                            setNextIndicator(aboutViewFlipper.getDisplayedChild());
-
-                            aboutViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_next_in));
-                            aboutViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(mContext,R.anim.go_next_out));
-                            aboutViewFlipper.showNext();
-
-                        } else if (fromX < toX) {
-
-                            if (aboutViewFlipper.getDisplayedChild() == 0) {
-
-                                break;
-
-                            }
-
-                            setPreviousIndicator(aboutViewFlipper.getDisplayedChild());
-
-                            aboutViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_prev_in));
-                            aboutViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(mContext, R.anim.go_prev_out));
-                            aboutViewFlipper.showPrevious();
-
-                        }
-
-                    default:
-                        break;
+                    }
 
                 }
 
-                return true;
-
-            }
-        };
-
-    }
-
-    private void makeAboutFlipper() {
-
-//        ScrollView scrollView = (ScrollView) findViewById(R.id.aboutTextScrollView);
-
-        ((ImageView) findViewById(R.id.aboutBottomBarIndicator1)).setImageResource(R.drawable.indicator_activ);
-        ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator);
-        ((ImageView) findViewById(R.id.aboutBottomBarIndicator3)).setImageResource(R.drawable.indicator);
-
-        aboutViewFlipper = (ViewFlipper) findViewById(R.id.aboutViewFlipper);
-
-        aboutViewFlipper.addView(mLayoutInflater.inflate(R.layout.about_text, null));
-        aboutViewFlipper.addView(mLayoutInflater.inflate(R.layout.about_links, null));
-        aboutViewFlipper.addView(mLayoutInflater.inflate(R.layout.about_authors, null));
-        aboutViewFlipper.setOnTouchListener(setAboutViewFlipperOnTouchListener());
-
-    }
-
-    private void setNextIndicator(int index) {
-
-        switch (index) {
-
-            case 0:
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator_activ);
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator1)).setImageResource(R.drawable.indicator);
                 break;
-            case 1:
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator3)).setImageResource(R.drawable.indicator_activ);
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator);
+
+            case R.id.twitterShareButton:
+
+                for (ResolveInfo info : activitiesList) {
+
+                    if (TWITTER_LAUNCHER.equals(info.activityInfo.name)) {
+
+                        ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+
+                        shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                        shareIntent.setComponent(componentName);
+                        startActivity(shareIntent);
+
+                        break;
+                    }
+
+                }
+
+                break;
+        }
+
+    }
+
+//    private void setBackgroundVideo() {
+//
+//        video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.noon);
+//
+//        mVideoView = (VideoView) findViewById(R.id.backgroundVideoView);
+//        mVideoView.setVideoURI(video);
+//        mVideoView.start();
+//        mVideoView.
+//
+//    }
+
+    private void changeLocation(View langButton) {
+
+        switch (langButton.getId())
+        {
+
+            case R.id.englishSettingsButton:
+                locale = "en";
+                break;
+            case R.id.alephSettingsButton:
+                locale = "he";
                 break;
 
         }
-    }
 
-    private void setPreviousIndicator(int index) {
-
-        switch (index) {
-
-            case 2:
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator_activ);
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator3)).setImageResource(R.drawable.indicator);
-                break;
-            case 1:
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator1)).setImageResource(R.drawable.indicator_activ);
-                ((ImageView) findViewById(R.id.aboutBottomBarIndicator2)).setImageResource(R.drawable.indicator);
-                break;
-
-        }
-    }
-
-    private void openLinks(int index, int id) {
-
-        String[] linksArray = getResources().getStringArray(R.array.links);
-
-        mainViewFlipper.addView(mLayoutInflater.inflate(R.layout.browser_view, null));
-        mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.sett_bar_in));
-        mainViewFlipper.showNext();
-
-        WebView webView = (WebView) findViewById(R.id.browserWebView);
-        ((TextView) findViewById(R.id.browserTitle)).setText(((TextView) findViewById(id)).getText());
-
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.setWebViewClient(new MyBrowser());
-        webView.loadUrl(linksArray[index]);
+        mLocale = new Locale(locale);
+        Locale.setDefault(mLocale);
+        Configuration configuration = new Configuration();
+        configuration.locale = mLocale;
+        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
     }
 
-    private class MyBrowser extends WebViewClient {
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-    }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Meditation</string>
+    <string name="aboutLabel">עוד...</string>
+    <string name="about_text">Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.\n\n The following meditation exercises are intended for both beginners and advanced practitioners of meditation, and is performed through the respiration. Release pent-up anger, fears, stress, etc. during daily life, individually or in small groups – at the beach, at work, at home, in the conference room, in school before classes, before major exams, and so on.\n\n The exercises, of varying durations, are guided by Prof. Jacob Raz, an author, researcher, and meditation practitioner, who has led meditation groups for 25 years.\n\n This is a “mindfulness” meditation, including only vocal guidance, without background sounds. This serves to help you connect more fully, attentively and alertly to your immediate surroundings. In order to enjoy other background sounds, you should turn off the vocal instructions.\n\n We recommend sitting comfortably, preferably on a cushion or pillow so your knees lightly touch the floor. We also recommend you switch your phone to “do not disturb” mode and breathe…</string>
+    <string name="day1">א</string>
+    <string name="day2">ב</string>
+    <string name="day3">ג</string>
+    <string name="day4">ד</string>
+    <string name="day5">ה</string>
+    <string name="day6">ו</string>
+    <string name="day7">ש</string>
+    <string name="whichDays">באילו ימים?</string>
+    <string name="whatTime">באיזו שעה?</string>
+    <string name="link_name0">אודות יעקב רז</string>
+    <string name="link_name1">על המדיטציה</string>
+    <string name="link_name2">אני, עצמי ושלי בתפישה הבודהיסטית</string>
+    <string name="link_name3">מדיטציה בוויקיפדיה</string>
+    <string name="link_name4">מדיטציה - תיאוריה , פרקטיקה ומחקר</string>
+    <string name="link_name5">על מדיטציית קשב פתוח</string>
+    <string name="minute">דקה</string>
+    <string name="kids">ילדים</string>
+    <string name="shareLabel">שיתוף</string>
+    <string name="shareTitle">שיתוף</string>
+    <string name="shareSubTitle">תגידו משהו לעולם</string>
+    <string name="reminderLabel">תזכורות</string>
+    <string name="reminderTitle">תזכורות</string>
+    <string name="sounds">צלילים</string>
+    <string name="guidance">הנחייה</string>
+    <string name="OneMinuteMeditationTitle">דקה אחת</string>
+    <string name="FiveMinutesMeditationTitle">5 דקות</string>
+    <string name="TenMinutesMeditationTitle">10 דקות</string>
+    <string name="TwentyMinutesMeditationTitle">20 דקות</string>
+    <string name="browserClose">חזרה</string>
+    <string name="action_settings">Settings</string>
+    <string name="english">English</string>
+    <string name="further_reading">לעיון נוסף</string>
+    <string name="language">Language</string>
+    <string name="languageSettingsLabel">Language</string>
+    <string-array name="links">
+        <item>http://he.m.wikipedia.org/wiki/%D7%99%D7%A2%D7%A7%D7%91_%D7%A8%D7%96</item>
+        <item>http://pdharma.co.il/261–2/317–2/</item>
+        <item>http://www.buddhism-israel.org/library/411</item>
+        <item>http://he.wikipedia.org/wiki/%D7%9E%D7%93%D7%99%D7%98%D7%A6%D7%99%D7%94</item>
+        <item>http://www.hebpsy.net/articles.asp?id=2654</item>
+        <item>http://www.mindfulexperience.org/</item>
+    </string-array>
+
+</resources>

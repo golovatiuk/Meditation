@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Meditation</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="browserClose">Close</string>
+
 
     <string name="about_text">
 Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.\n\n
@@ -35,5 +37,36 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
     <string name="languageSettingsLabel">Language</string>
     <string name="shareLabel">Share</string>
     <string name="reminderLabel">Reminders</string>
+
+    <string name="language">Language</string>
+    <string name="english">English</string>
+
+    <string name="shareTitle">Share</string>
+    <string name="shareSubTitle">Share a thought with the world…</string>
+
+    <string name="reminderTitle">Reminders</string>
+    <string name="whichDays">Which Days?</string>
+    <string name="whatTime">What Time?</string>
+    <string name="day1">Su</string>
+    <string name="day2">M</string>
+    <string name="day3">Tu</string>
+    <string name="day4">W</string>
+    <string name="day5">Th</string>
+    <string name="day6">F</string>
+    <string name="day7">Sa</string>
+
+    <string name="sounds">Sounds</string>
+    <string name="guidance">Guidance</string>
+
+    <string name="OneMinuteMeditationTitle">Breathing</string>
+    <string name="FiveMinutesMeditationTitle">Listening</string>
+    <string name="TenMinutesMeditationTitle">Concentration</string>
+    <string name="TwentyMinutesMeditationTitle">Serenity</string>
+
+    <string name="creditsProducer" translatable="false">Creator Producer: <b>Keren Yehezkely Goldstein</b></string>
+    <string name="creditsGuidance" translatable="false">Meditation Guidance: <b>Prof. Jacob Raz</b></string>
+    <string name="creditsDesign" translatable="false">Design: <b>Nadia Gorenstein Studio</b></string>
+    <string name="creditsDevelopment" translatable="false">Development: <b>Dan Caspi</b></string>
+    <string name="creditsMusic" translatable="false">Music: <b>Roy Dahan</b></string>
 
 </resources>

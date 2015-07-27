@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#43300000">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/shareCloseButton"
+        android:onClick="onClick"
+        android:background="@drawable/main_drawer_button_background"
+        android:src="@drawable/x"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shareTitle"
+        android:id="@+id/textView6"
+        android:layout_gravity="center_horizontal"
+        style="@style/TitleTextStyle"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/shareSubTitle"
+        android:id="@+id/textView7"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:textColor="#ff000000"
+        android:textSize="18sp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/langSettSeparator1"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/drawer_separator"
+        android:paddingLeft="40sp"
+        android:paddingRight="40sp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_margin="25sp"
+        android:weightSum="1">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/shareMessageEditText"
+            android:layout_weight="1"
+            android:background="@drawable/main_drawer_button_background"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginLeft="10sp"
+            >
+
+            <ImageButton
+                android:layout_width="70sp"
+                android:layout_height="67sp"
+                android:id="@+id/facebookShareButton"
+                android:background="@drawable/facebook"
+                android:layout_marginBottom="5sp"
+                android:onClick="onClick"/>
+
+            <ImageButton
+                android:layout_width="70sp"
+                android:layout_height="67sp"
+                android:id="@+id/twitterShareButton"
+                android:background="@drawable/twitter"
+                android:layout_marginTop="5sp"
+                android:onClick="onClick"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -15,7 +15,7 @@
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
         android:textSize="28dp"
-        />
+        style="@style/TitleTextStyle"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -75,6 +75,6 @@
         android:clickable="true"
         android:layout_margin="5dp"
         android:textColor="#ff0054ff"
-        android:onClick="onClick"/>
+        />
 
 </LinearLayout>

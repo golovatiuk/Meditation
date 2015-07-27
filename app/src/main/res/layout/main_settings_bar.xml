@@ -1,122 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="wrap_content"
-    android:background="#2c3f0000">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#43300000">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:padding="10dp">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingTop="20dp"
-            >
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="67dp"
+            android:id="@+id/settingsInfoButton"
+            android:src="@drawable/about"
+            android:background="@drawable/main_drawer_button_background"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sattingsInfoButton"
-                android:src="@drawable/about"
-                android:background="@drawable/main_drawer_button_background"
-                android:layout_alignTop="@+id/sattingsLanguageButton"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                />
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="67dp"
+            android:id="@+id/settingsLanguageButton"
+            android:src="@drawable/language"
+            android:background="@drawable/main_drawer_button_background"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/sattingsLanguageButton"
-                android:src="@drawable/language"
-                android:background="@drawable/main_drawer_button_background"
-                android:layout_alignTop="@+id/settingsShareButton"
-                android:layout_toRightOf="@+id/sattingsInfoButton"
-                android:layout_toEndOf="@+id/sattingsInfoButton"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                />
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="67dp"
+            android:id="@+id/settingsShareButton"
+            android:src="@drawable/share"
+            android:background="@drawable/main_drawer_button_background"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/settingsShareButton"
-                android:src="@drawable/share"
-                android:background="@drawable/main_drawer_button_background"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/sattingsLanguageButton"
-                android:layout_toEndOf="@+id/sattingsLanguageButton"
-                android:layout_margin="10dp"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/settingsRemindersButton"
-                android:src="@drawable/reminders"
-                android:layout_weight="1"
-                android:background="@drawable/main_drawer_button_background"
-                android:layout_alignTop="@+id/settingsShareButton"
-                android:layout_toRightOf="@+id/settingsShareButton"
-                android:layout_toEndOf="@+id/settingsShareButton"
-                android:layout_margin="10dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/aboutLabel"
-                android:id="@+id/textView"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:textSize="18dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/languageSettingsLabel"
-                android:id="@+id/textView3"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:textSize="18dp"
-                android:layout_marginBottom="5dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/shareLabel"
-                android:id="@+id/textView4"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:textSize="18dp"
-                android:layout_marginBottom="5dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/reminderLabel"
-                android:id="@+id/textView5"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:textSize="18dp"
-                android:layout_marginBottom="5dp"/>
-        </LinearLayout>
+        <ImageButton
+            android:layout_width="70dp"
+            android:layout_height="67dp"
+            android:id="@+id/settingsRemindersButton"
+            android:src="@drawable/reminders"
+            android:background="@drawable/main_drawer_button_background"
+            android:onClick="onClick"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
 
     </LinearLayout>
 
-</ViewFlipper>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/aboutLabel"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/languageSettingsLabel"
+            android:id="@+id/textView3"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/shareLabel"
+            android:id="@+id/textView4"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/reminderLabel"
+            android:id="@+id/textView5"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:padding="20sp"
+    android:background="#43300000">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/settingsLanguageCloseButton"
+        android:onClick="onClick"
+        android:background="@drawable/main_drawer_button_background"
+        android:src="@drawable/x" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/language"
+        android:id="@+id/textView6"
+        android:layout_gravity="center_horizontal"
+        style="@style/TitleTextStyle"
+        android:layout_margin="25sp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/langSettSeparator1"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/drawer_separator"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_margin="25sp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/englishSettingsButton"
+                android:src="@drawable/a"
+                android:background="@drawable/main_drawer_button_background"
+                android:layout_marginBottom="5dp"
+                android:onClick="onClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/english"
+                android:id="@+id/english"
+                android:textSize="24sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/alephSettingsButton"
+                android:src="@drawable/aleph"
+                android:background="@drawable/main_drawer_button_background"
+                android:layout_marginBottom="5dp"
+                android:onClick="onClick"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="שלום"
+                android:id="@+id/aleph"
+                android:textSize="24sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView6"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/drawer_separator"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+</LinearLayout>
