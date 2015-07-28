@@ -5,104 +5,121 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#43300000">
+    android:background="#48c79900">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:padding="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="67dp"
-            android:id="@+id/settingsInfoButton"
-            android:src="@drawable/about"
-            android:background="@drawable/main_drawer_button_background"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="67dp"
-            android:id="@+id/settingsLanguageButton"
-            android:src="@drawable/language"
-            android:background="@drawable/main_drawer_button_background"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="67dp"
-            android:id="@+id/settingsShareButton"
-            android:src="@drawable/share"
-            android:background="@drawable/main_drawer_button_background"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-
-        <ImageButton
-            android:layout_width="70dp"
-            android:layout_height="67dp"
-            android:id="@+id/settingsRemindersButton"
-            android:src="@drawable/reminders"
-            android:background="@drawable/main_drawer_button_background"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:layout_margin="5dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/aboutLabel"
-            android:id="@+id/textView"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/languageSettingsLabel"
-            android:id="@+id/textView3"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/settingsInfoButton"
+                android:src="@drawable/chosen_about"
+                android:background="@drawable/main_drawer_button_background"
+                android:onClick="onClick"
+                android:layout_margin="5dp"
+                android:scaleType="fitCenter"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/shareLabel"
-            android:id="@+id/textView4"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aboutLabel"
+                android:id="@+id/textView"
+                android:gravity="center_horizontal"
+                android:textColor="#ff000000"/>
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reminderLabel"
-            android:id="@+id/textView5"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"/>
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/settingsLanguageButton"
+                android:src="@drawable/chosen_language"
+                android:background="@drawable/main_drawer_button_background"
+                android:onClick="onClick"
+                android:layout_margin="5dp"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/languageSettingsLabel"
+                android:id="@+id/textView3"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:textColor="#ff000000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/settingsShareButton"
+                android:src="@drawable/chosen_share"
+                android:background="@drawable/main_drawer_button_background"
+                android:onClick="onClick"
+                android:layout_margin="5dp"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/shareLabel"
+                android:id="@+id/textView4"
+                android:gravity="center_horizontal"
+                android:textColor="#ff000000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/settingsRemindersButton"
+                android:background="@drawable/main_drawer_button_background"
+                android:onClick="onClick"
+                android:src="@drawable/chosen_reminders"
+                android:scaleType="fitCenter"
+                android:layout_margin="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reminderLabel"
+                android:id="@+id/textView5"
+                android:gravity="center_horizontal"
+                android:textColor="#ff000000"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

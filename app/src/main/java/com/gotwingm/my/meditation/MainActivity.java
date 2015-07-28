@@ -7,9 +7,14 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,20 +22,24 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ViewFlipper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends Activity implements View.OnClickListener{
+public class MainActivity extends Activity implements View.OnClickListener, SurfaceHolder.Callback{
 
     public static int timer;
     public static String STRING_EXTRA = "string extra";
-    public static String TIME_EXTRA = "time";
 
     private Locale mLocale;
     private String locale;
-//    private VideoView mVideoView;
-//    private Uri video;
+
+    SurfaceView mSurfaceView;
+    SurfaceHolder mSurfaceHolder;
+    MediaPlayer backgroundVideoPlayer;
+    DisplayMetrics mDisplayMetrics;
+    private Uri video;
 
     RemindersManager mRemindersManager;
     AboutViewManager mAboutViewManager;
@@ -44,6 +53,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public static View mainView;
     public static View meditationView;
     public static Context context;
+    public static ViewFlipper settingsFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-//        setBackgroundVideo();
+        prepareBackgroundVideo();
 
         context = MainActivity.this;
         layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -75,7 +85,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         if (!TextUtils.isEmpty(intent.getStringExtra(STRING_EXTRA))) {
 
-            timer = intent.getIntExtra(TIME_EXTRA, 1);
+            timer = 1;
             makeMainView();
 
         } else {
@@ -91,6 +101,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId())
         {
+            case R.id.mainRelativLayout:
+
+                settingsFlipper.removeAllViews();
+
+                break;
+
             case R.id.settingsInfoButton:
 
                 mAboutViewManager.makeAboutView();
@@ -123,6 +139,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             case R.id.settingsLanguageCloseButton:
 
                 makeMainView();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
@@ -137,6 +154,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             case R.id.shareCloseButton:
 
                 makeMainView();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
@@ -160,8 +178,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
             case R.id.remindersManagerCloseButton:
 
-                mRemindersManager.createAlarms();
                 makeMainView();
+                mainViewFlipper.removeViewAt(0);
 
                 break;
 
@@ -175,6 +193,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             case R.id.aboutViewCloseButton:
 
                 makeMainView();
+                mainViewFlipper.removeViewAt(0);
                 mAboutViewManager.aboutViewFlipper.removeAllViews();
 
                 break;
@@ -195,7 +214,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
             case R.id.meditationSettingsButton:
 
-                ViewFlipper settingsFlipper = (ViewFlipper) findViewById(R.id.settingsFlipper);
+                settingsFlipper = (ViewFlipper) findViewById(R.id.settingsFlipper);
 
                 settingsFlipper.addView(layoutInflater.inflate(R.layout.main_settings_bar, null));
                 settingsFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_in));
@@ -206,6 +225,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
             case R.id.meditationBackButton:
 
                 makeMainView();
+                mainViewFlipper.removeViewAt(0);
                 mMeditationManger.stop();
                 mMeditationManger.progressBarWork = false;
                 mMeditationManger.mLinearLayout.removeAllViews();
@@ -261,8 +281,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
         mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_out));
         mainViewFlipper.showNext();
-
-        mainViewFlipper.removeViewAt(0);
 
     }
 
@@ -322,16 +340,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     }
 
-//    private void setBackgroundVideo() {
-//
-//        video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.noon);
-//
-//        mVideoView = (VideoView) findViewById(R.id.backgroundVideoView);
-//        mVideoView.setVideoURI(video);
-//        mVideoView.start();
-//        mVideoView.
-//
-//    }
+    private void prepareBackgroundVideo() {
+
+        mDisplayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+
+        mSurfaceView = (SurfaceView) findViewById(R.id.backgroundVideoSurface);
+        mSurfaceHolder = mSurfaceView.getHolder();
+        mSurfaceHolder.addCallback(this);
+
+        backgroundVideoPlayer = new MediaPlayer();
+        video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.noon);
+
+    }
 
     private void changeLocation(View langButton) {
 
@@ -355,4 +376,31 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+
+        mSurfaceHolder.setFixedSize(mDisplayMetrics.widthPixels, mDisplayMetrics.heightPixels);
+
+        try {
+            backgroundVideoPlayer.setDataSource(context, video);
+            backgroundVideoPlayer.setDisplay(mSurfaceHolder);
+            backgroundVideoPlayer.setLooping(true);
+            backgroundVideoPlayer.prepare();
+            backgroundVideoPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
 }

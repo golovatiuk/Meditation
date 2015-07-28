@@ -4,7 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/mainRelativLayout"
+    android:onClick="onClick">
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -57,11 +59,11 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:gravity="center"
             android:id="@+id/linearLayout3"
-            android:layout_above="@+id/meditationSettingsButton"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center">
 
             <LinearLayout
                 android:orientation="vertical"

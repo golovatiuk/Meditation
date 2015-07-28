@@ -19,12 +19,11 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".MyService"
+        <receiver
+            android:name=".MeditationReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:process="MeditationService">
-        </service>
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

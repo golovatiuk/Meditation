@@ -10,48 +10,52 @@
         >
 
         <ImageButton
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/meditationSettSubBarMusicButton"
             android:src="@drawable/music2"
             android:background="@drawable/main_drawer_button_background"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/meditationSettSubBarMusic2Button"
             android:layout_toStartOf="@+id/meditationSettSubBarMusic2Button"
-            android:layout_margin="2dp"/>
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"/>
 
         <ImageButton
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/meditationSettSubBarMusic2Button"
             android:background="@drawable/main_drawer_button_background"
             android:src="@drawable/music"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/meditationSettSubBarBirdButton"
             android:layout_toStartOf="@+id/meditationSettSubBarBirdButton"
-            android:layout_margin="2dp"/>
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"/>
 
         <ImageButton
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/meditationSettSubBarBirdButton"
             android:src="@drawable/bird"
             android:background="@drawable/main_drawer_button_background"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/meditationSettSubBarSeaButton"
             android:layout_toStartOf="@+id/meditationSettSubBarSeaButton"
-            android:layout_margin="2dp"/>
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"/>
 
         <ImageButton
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:id="@+id/meditationSettSubBarSeaButton"
             android:src="@drawable/sea"
             android:layout_toLeftOf="@+id/textView31"
             android:layout_toStartOf="@+id/textView31"
             android:background="@drawable/main_drawer_button_background"
             android:layout_centerVertical="true"
-            android:layout_margin="2dp"/>
+            android:layout_margin="5dp"
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,7 +63,7 @@
             android:text="@string/sounds"
             android:id="@+id/textView31"
             android:textColor="#ff000000"
-            android:textSize="28dp"
+            android:textSize="26dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -67,6 +71,14 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="2dp"
             android:layout_marginLeft="2dp"/>
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/subBarSeparator"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/drawer_separator"/>
 
     </RelativeLayout>
 

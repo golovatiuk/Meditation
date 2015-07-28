@@ -10,9 +10,10 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.GregorianCalendar;
 
 
 public class RemindersManager extends MainActivity implements View.OnClickListener {
@@ -35,8 +36,6 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
         mView = null;
         timer = 1;
-        mHour = 0;
-        mMinute = 0;
         day = 0;
         daysPicked = new boolean[]{false, false, false, false, false, false, false, false};
 
@@ -56,6 +55,9 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
         remindersView.findViewById(R.id.day6).setOnClickListener(RemindersManager.this);
         remindersView.findViewById(R.id.day7).setOnClickListener(RemindersManager.this);
 
+        remindersView.findViewById(R.id.cancelRemindersButton).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.okRemindersButton).setOnClickListener(RemindersManager.this);
+
         remindersView.findViewById(R.id.remindersTimePickerButton).setOnClickListener(RemindersManager.this);
 
     }
@@ -65,6 +67,18 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
         switch (v.getId())
         {
+
+            case R.id.cancelRemindersButton:
+
+                cancelAlarms();
+
+                break;
+
+            case R.id.okRemindersButton:
+
+                createAlarms();
+
+                break;
 
             case R.id.remindersTimePickerButton:
 
@@ -158,9 +172,16 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
     }
 
+    private void cancelAlarms() {
+
+    }
+
     public void makeRemindersView() {
 
-        mCalendar = Calendar.getInstance(TimeZone.getDefault());
+        mCalendar = new GregorianCalendar();
+
+        mHour = mCalendar.HOUR_OF_DAY;
+        mMinute = mCalendar.MINUTE;
 
         mainViewFlipper.addView(remindersView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
@@ -204,12 +225,14 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
         int dayCount = 0;
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-                new Intent(context, MyService.class), 0);
+                new Intent(context, MeditationReceiver.class), 0);
 
-        mCalendar.set(Calendar.HOUR, mHour);
+        mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
         mCalendar.set(Calendar.MINUTE, mMinute);
 
         mAlarmManager.set(AlarmManager.RTC, mCalendar.getTimeInMillis(), pendingIntent);
+
+        Toast.makeText(context, "Reminder created", Toast.LENGTH_SHORT).show();
 
 //        for (boolean isPicked : daysPicked) {
 //

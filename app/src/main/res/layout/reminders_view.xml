@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#41300000"
+    android:background="#48c79900"
     android:weightSum="1">
 
     <ImageButton
@@ -24,20 +24,15 @@
         android:id="@+id/textView6"
         android:layout_gravity="center_horizontal"
         style="@style/TitleTextStyle"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_margin="10dp"
-        />
+        android:layout_margin="5dp"/>
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/langSettSeparator1"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/drawer_separator"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -184,14 +179,14 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView7"
+        android:id="@+id/langSettSeparator2"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/drawer_separator"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="5dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -199,7 +194,7 @@
         android:text="@string/whichDays"
         android:id="@+id/textView28"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:textSize="24dp"
         android:textColor="#ff000000"
         />
@@ -272,14 +267,14 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView8"
+        android:id="@+id/langSettSeparator3"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/drawer_separator"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
-        android:layout_margin="10dp"/>
+        android:layout_margin="5dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -289,7 +284,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="24sp"
         android:textColor="#ff000000"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         />
 
     <Button
@@ -298,7 +293,31 @@
         android:id="@+id/remindersTimePickerButton"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/main_drawer_chosen_button_background"
-        android:text="Time"
-        />
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_margin="5dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel All"
+            android:id="@+id/cancelRemindersButton"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Ok"
+            android:id="@+id/okRemindersButton"
+            android:layout_weight="1"
+            android:layout_margin="5dp"/>
+    </LinearLayout>
 
 </LinearLayout>
