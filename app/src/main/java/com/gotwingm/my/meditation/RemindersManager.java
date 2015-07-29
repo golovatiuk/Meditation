@@ -4,7 +4,10 @@ import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -18,8 +21,10 @@ import java.util.GregorianCalendar;
 
 public class RemindersManager extends MainActivity implements View.OnClickListener {
 
+    public static final String TABLE_NAME = "reminders";
+    private static final String ACTION = "action";
+
     private View mView;
-    private static int timer;
 
     AlarmManager mAlarmManager;
     Button timePickerButton;
@@ -32,8 +37,11 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
     private Calendar mCalendar;
 
+    RemindersDBHelper RemindersDB;
+
     RemindersManager() {
 
+        RemindersDB = new RemindersDBHelper(context);
         mView = null;
         timer = 1;
         day = 0;
@@ -174,6 +182,29 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
     private void cancelAlarms() {
 
+        SQLiteDatabase db = RemindersDB.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst())
+        {
+
+            int actionColumnIndex = cursor.getColumnIndex(ACTION);
+
+            do {
+
+                mAlarmManager.cancel(PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, MeditationReceiver.class)
+                                .setAction(cursor.getString(actionColumnIndex)), PendingIntent.FLAG_CANCEL_CURRENT));
+
+                Toast.makeText(context, "Reminder canceled " + cursor.getString(actionColumnIndex), Toast.LENGTH_SHORT).show();
+
+            } while (cursor.moveToNext());
+
+        }
+
+        db.delete(TABLE_NAME, null, null);
+        cursor.close();
+
     }
 
     public void makeRemindersView() {
@@ -189,7 +220,7 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
         mainViewFlipper.showNext();
 
         timePickerButton = (Button) remindersView.findViewById(R.id.remindersTimePickerButton);
-        timePickerButton.setText(makeTime(mCalendar.get(Calendar.HOUR_OF_DAY)) + ":" + makeTime(mCalendar.get(Calendar.MINUTE)));
+        timePickerButton.setText(makeCorrectTime(mCalendar.get(Calendar.HOUR_OF_DAY)) + ":" + makeCorrectTime(mCalendar.get(Calendar.MINUTE)));
 
         mainViewFlipper.removeViewAt(0);
 
@@ -222,54 +253,62 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
     public void createAlarms() {
 
+        SQLiteDatabase db = RemindersDB.getWritableDatabase();
+        String action;
+
+        ContentValues values = new ContentValues();
         int dayCount = 0;
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
-                new Intent(context, MeditationReceiver.class), 0);
+        for (boolean isPicked : daysPicked) {
 
-        mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
-        mCalendar.set(Calendar.MINUTE, mMinute);
+            if (isPicked) {
 
-        mAlarmManager.set(AlarmManager.RTC, mCalendar.getTimeInMillis(), pendingIntent);
+                switch (dayCount)
+                {
+                    case 0:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                        break;
+                    case 1:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+                        break;
+                    case 2:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+                        break;
+                    case 3:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+                        break;
+                    case 4:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+                        break;
+                    case 5:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+                        break;
+                    case 6:
+                        mCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+                        break;
+                }
 
-        Toast.makeText(context, "Reminder created", Toast.LENGTH_SHORT).show();
+                action = returnDayOfWeekName(mCalendar.get(Calendar.DAY_OF_WEEK)) + "_"
+                        + mCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+                        + mCalendar.get(Calendar.MINUTE);
 
-//        for (boolean isPicked : daysPicked) {
-//
-//            if (isPicked) {
-//
-//                switch (dayCount)
-//                {
-//                    case 0:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-//                        break;
-//                    case 1:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-//                        break;
-//                    case 2:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-//                        break;
-//                    case 3:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-//                        break;
-//                    case 4:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-//                        break;
-//                    case 5:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-//                        break;
-//                    case 6:
-//                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-//                        break;
-//                }
-//
-//                mAlarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
-//
-//            }
-//
-//            dayCount++;
-//
-//        }
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0,
+                        new Intent(context, MeditationReceiver.class).setAction(action), PendingIntent.FLAG_CANCEL_CURRENT);
+
+                mAlarmManager.setRepeating(AlarmManager.RTC, mCalendar.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
+
+                values.put(ACTION, action);
+                long id = db.insert(TABLE_NAME, null, values);
+
+                values.clear();
+
+                Toast.makeText(context, "Reminder created " + action, Toast.LENGTH_SHORT).show();
+
+            }
+
+            dayCount++;
+
+        }
 
     }
 
@@ -283,7 +322,10 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
                         mHour = hourOfDay;
                         mMinute = minute;
 
-                        timePickerButton.setText(makeTime(hourOfDay) + ":" + makeTime(minute));
+                        mCalendar.set(Calendar.HOUR_OF_DAY, mHour);
+                        mCalendar.set(Calendar.MINUTE, mMinute);
+
+                        timePickerButton.setText(makeCorrectTime(hourOfDay) + ":" + makeCorrectTime(minute));
 
                     }
                 }, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), true);
@@ -292,13 +334,36 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
     }
 
-    private String makeTime(int i) {
+    private String makeCorrectTime(int i) {
 
         if (i >= 0 && i <= 9) {
 
             return "0" + i;
 
         } else return String.valueOf(i);
+
+    }
+
+    private String returnDayOfWeekName(int dayOfWeek){
+
+        switch (dayOfWeek)
+        {
+            case 1:
+                return "SUNDAY";
+            case 2:
+                return "MONDAY";
+            case 3:
+                return "TUESDAY";
+            case 4:
+                return "WEDNESDAY";
+            case 5:
+                return "THURSDAY";
+            case 6:
+                return "FRIDAY";
+            case 7:
+                return "SATURDAY";
+            default: return "";
+        }
 
     }
 
