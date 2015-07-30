@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -24,19 +25,16 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
     public static final String TABLE_NAME = "reminders";
     private static final String ACTION = "action";
 
-    private View mView;
-
-    AlarmManager mAlarmManager;
-    Button timePickerButton;
-
     public static int mHour;
     public static int mMinute;
 
+    private View mView;
     private int day;
     private boolean[] daysPicked;
-
     private Calendar mCalendar;
 
+    AlarmManager mAlarmManager;
+    Button timePickerButton;
     RemindersDBHelper RemindersDB;
 
     RemindersManager() {
@@ -196,14 +194,17 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
                         new Intent(context, MeditationReceiver.class)
                                 .setAction(cursor.getString(actionColumnIndex)), PendingIntent.FLAG_CANCEL_CURRENT));
 
-                Toast.makeText(context, "Reminder canceled " + cursor.getString(actionColumnIndex), Toast.LENGTH_SHORT).show();
-
             } while (cursor.moveToNext());
+
+            Toast.makeText(context, "Reminder(s) canceled.", Toast.LENGTH_SHORT).show();
 
         }
 
-        db.delete(TABLE_NAME, null, null);
         cursor.close();
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("CREATE TABLE " + TABLE_NAME + " (_ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + ACTION + " TEXT);");
 
     }
 
@@ -213,6 +214,8 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
         mHour = mCalendar.HOUR_OF_DAY;
         mMinute = mCalendar.MINUTE;
+
+        ((ImageView)remindersView.findViewById(R.id.remindersKidIcon)).setImageResource(kidIconId);
 
         mainViewFlipper.addView(remindersView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
@@ -255,7 +258,6 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
         SQLiteDatabase db = RemindersDB.getWritableDatabase();
         String action;
-
         ContentValues values = new ContentValues();
         int dayCount = 0;
 
@@ -298,8 +300,7 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
                 mAlarmManager.setRepeating(AlarmManager.RTC, mCalendar.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
 
                 values.put(ACTION, action);
-                long id = db.insert(TABLE_NAME, null, values);
-
+                db.insert(TABLE_NAME, null, values);
                 values.clear();
 
                 Toast.makeText(context, "Reminder created " + action, Toast.LENGTH_SHORT).show();

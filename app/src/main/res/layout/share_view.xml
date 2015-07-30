@@ -62,7 +62,7 @@
             android:ems="10"
             android:id="@+id/shareMessageEditText"
             android:layout_weight="1"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="#ffffffff"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -73,16 +73,16 @@
             >
 
             <ImageButton
-                android:layout_width="70sp"
-                android:layout_height="67sp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/facebookShareButton"
                 android:background="@drawable/facebook"
                 android:layout_marginBottom="5sp"
                 android:onClick="onClick"/>
 
             <ImageButton
-                android:layout_width="70sp"
-                android:layout_height="67sp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:id="@+id/twitterShareButton"
                 android:background="@drawable/twitter"
                 android:layout_marginTop="5sp"

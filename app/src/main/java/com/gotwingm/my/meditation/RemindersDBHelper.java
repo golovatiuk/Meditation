@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class RemindersDBHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "reminders.db";
+    public static final String DB_NAME = "reminders";
     public static final String TABLE_NAME = "reminders";
     public static final String ACTION = "action";
 
@@ -23,12 +23,13 @@ public class RemindersDBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " (_ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + ACTION + " TEXT);");
 
-        Log.d("###", "Table created");
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
 
     }
 }

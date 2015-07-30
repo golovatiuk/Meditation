@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,26 +21,38 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ViewFlipper;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, SurfaceHolder.Callback{
 
+    public static final String RES_PATH = "android.resource://";
+    public static final String DIR_SEPARATOR = "/";
+    public static final String STRING_EXTRA = "string extra";
+
     public static int timer;
-    public static String STRING_EXTRA = "string extra";
+    public static int videoId;
+    public static int kidIconId;
+    public static int sunIconId;
+    public static int playImageId;
+    public static int pauseImageId;
+    public static int replayImageId;
 
     private Locale mLocale;
     private String locale;
+    private Uri video;
 
     SurfaceView mSurfaceView;
     SurfaceHolder mSurfaceHolder;
     MediaPlayer backgroundVideoPlayer;
     DisplayMetrics mDisplayMetrics;
-    private Uri video;
 
     RemindersManager mRemindersManager;
     AboutViewManager mAboutViewManager;
@@ -64,6 +77,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        timeOfADayUiChange();
         prepareBackgroundVideo();
 
         context = MainActivity.this;
@@ -75,7 +89,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         mainView = layoutInflater.inflate(R.layout.main_view, null);
         remindersView = layoutInflater.inflate(R.layout.reminders_view, null);
         meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
-
 
         mRemindersManager = new RemindersManager();
         mAboutViewManager = new AboutViewManager();
@@ -94,14 +107,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
         }
 
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.mainRelativLayout:
+            case R.id.mainRelativeLayout:
 
                 settingsFlipper.removeAllViews();
 
@@ -229,6 +241,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 mMeditationManger.stop();
                 mMeditationManger.progressBarWork = false;
                 mMeditationManger.mLinearLayout.removeAllViews();
+                if (mMeditationManger.secondMediaPlayer != null)
+                {
+                    mMeditationManger.secondMediaPlayer.stop();
+                    mMeditationManger.secondMediaPlayer.release();
+                    mMeditationManger.secondMediaPlayer = null;
+                }
 
                 break;
 
@@ -276,8 +294,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     public void makeMainView() {
 
-        mainViewFlipper.addView(layoutInflater.inflate(R.layout.main_view, null));
+        View mainView = layoutInflater.inflate(R.layout.main_view, null);
+        mainView.findViewById(R.id.mainScreenLogo).setBackgroundResource(sunIconId);
+        mainView.findViewById(R.id.mainBackButtonSunImage).setBackgroundResource(sunIconId);
+        ((ImageView) mainView.findViewById(R.id.kidImageView)).setImageResource(kidIconId);
 
+        mainViewFlipper.addView(mainView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
         mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_out));
         mainViewFlipper.showNext();
@@ -316,6 +338,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
                 }
 
+                Log.d("###", "Can't find facebook launcher");
+
                 break;
 
             case R.id.twitterShareButton:
@@ -335,6 +359,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
                 }
 
+                Log.d("###", "Can't find twitter launcher");
+
                 break;
         }
 
@@ -350,7 +376,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         mSurfaceHolder.addCallback(this);
 
         backgroundVideoPlayer = new MediaPlayer();
-        video = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.noon);
+        video = Uri.parse(RES_PATH + getPackageName() + DIR_SEPARATOR + videoId);
 
     }
 
@@ -373,6 +399,42 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         Configuration configuration = new Configuration();
         configuration.locale = mLocale;
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+
+    }
+
+    private void timeOfADayUiChange() {
+
+        GregorianCalendar calendar = new GregorianCalendar();
+        int hourOfADay = calendar.get(Calendar.HOUR_OF_DAY);
+
+        playImageId = R.drawable.play;
+        pauseImageId = R.drawable.pause;
+        replayImageId = R.drawable.replay;
+
+        if (hourOfADay >= 6 && hourOfADay <= 9)
+        {
+            videoId = R.raw.morning;
+            kidIconId = R.drawable.smiley_morning;
+            sunIconId = R.drawable.sun_morning;
+        } else if (hourOfADay >= 10 && hourOfADay <= 14)
+        {
+            videoId = R.raw.noon;
+            kidIconId = R.drawable.smiley_noon;
+            sunIconId = R.drawable.sun_noon;
+        } else if (hourOfADay >= 15 && hourOfADay <= 19)
+        {
+            videoId = R.raw.evening;
+            kidIconId = R.drawable.smiley_evening;
+            sunIconId = R.drawable.sun_evening;
+        } else
+        {
+            videoId = R.raw.night;
+            kidIconId = R.drawable.smiley_night;
+            sunIconId = R.drawable.sun_night;
+            playImageId = R.drawable.play_night;
+            pauseImageId = R.drawable.pause_night;
+            replayImageId = R.drawable.replay_night;
+        }
 
     }
 

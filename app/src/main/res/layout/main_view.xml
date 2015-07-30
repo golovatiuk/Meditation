@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:id="@+id/mainRelativLayout"
+    android:id="@+id/mainRelativeLayout"
     android:onClick="onClick">
 
         <RelativeLayout
@@ -17,7 +17,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:id="@+id/imageView2"
+                android:id="@+id/mainBackButtonSunImage"
                 android:src="@drawable/sun_noon"
                 android:minHeight="100dp"
                 android:clickable="false"/>
@@ -34,13 +34,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="150dp"
-            android:id="@+id/imageView4"
+            android:id="@+id/mainSunImage"
             android:background="@drawable/sun_noon"
             android:layout_alignRight="@+id/mainScreenLogo"
             android:layout_alignEnd="@+id/mainScreenLogo"
             android:layout_alignLeft="@+id/mainScreenLogo"
             android:layout_alignStart="@+id/mainScreenLogo"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="50dp"
+            android:focusableInTouchMode="false"/>
 
         <ImageView
             android:layout_width="250dp"
@@ -178,12 +179,13 @@
                 android:onClick="onClick">
 
                 <ImageView
-                    android:layout_width="44dp"
+                    android:layout_width="46dp"
                     android:layout_height="46dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/imageView3"
+                    android:id="@+id/kidImageView"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/smiley_noon" />
+                    android:src="@drawable/smiley_noon"
+                    android:layout_marginBottom="4dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"

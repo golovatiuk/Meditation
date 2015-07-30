@@ -161,12 +161,13 @@
             >
 
             <ImageView
-                android:layout_width="44dp"
+                android:layout_width="46dp"
                 android:layout_height="46dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/imageView5"
+                android:id="@+id/remindersKidIcon"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/smiley_noon"/>
+                android:src="@drawable/smiley_noon"
+                android:layout_marginBottom="4dp"/>
 
             <TextView
                 android:layout_width="wrap_content"

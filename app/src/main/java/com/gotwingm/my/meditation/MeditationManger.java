@@ -17,6 +17,10 @@ import java.io.IOException;
 
 public class MeditationManger extends MainActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
+    private static final int FULL_ALIGN_BACKGROUND_COLOR = Color.parseColor("#00000000");
+
+    Uri melodyUri;
+    int volume;
     int resId;
     int secondResId;
     boolean isPlayerOnPause;
@@ -24,6 +28,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
     boolean isReplay;
     boolean canReplay;
     boolean isPlay;
+    boolean isSettingsSubBar;
     int progress;
     int progressMax;
     Thread mThread;
@@ -57,7 +62,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
         playButton.setOnClickListener(MeditationManger.this);
         meditationView.findViewById(R.id.meditationSettingsButton).setOnClickListener(MeditationManger.this);
-        meditationView.findViewById(R.id.meditationRelativLayout).setOnClickListener(MeditationManger.this);
+        meditationView.findViewById(R.id.meditationRelativeLayout).setOnClickListener(MeditationManger.this);
 
         mProgressBar = (ProgressBar) meditationView.findViewById(R.id.progressBar);
         mLinearLayout = (LinearLayout) meditationView.findViewById(R.id.meditationSettingsLL);
@@ -70,7 +75,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
         switch (v.getId())
         {
-            case R.id.meditationRelativLayout:
+            case R.id.meditationRelativeLayout:
 
                 mLinearLayout.removeAllViews();
 
@@ -78,11 +83,32 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
             case R.id.meditationSettBarOKButton:
 
+                isSettingsSubBar = false;
+
+                if (secondMediaPlayer != null)
+                {
+
+                    secondMediaPlayer.stop();
+                    secondMediaPlayer.release();
+                    secondMediaPlayer = null;
+                    melodyButton.setBackgroundResource(R.drawable.main_drawer_button_background);
+
+                }
+
+                if (mainMediaPlayer != null)
+                {
+
+                    mainMediaPlayer.setVolume(volume, volume);
+
+                }
+
                 openSettBar();
 
                 break;
 
             case R.id.meditationSettBarXButton:
+
+                isSettingsSubBar = true;
 
                 openSettSubBar();
 
@@ -116,7 +142,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
                 if (isReplay)
                 {
-                    shareButton.setBackgroundColor(Color.parseColor("#00000000"));
+                    shareButton.setBackgroundColor(FULL_ALIGN_BACKGROUND_COLOR);
                     shareButton.setEnabled(false);
                     isReplay = false;
 
@@ -131,11 +157,13 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 {
                     stopListeningProgress();
                     pause();
-                    playButton.setBackgroundResource(R.drawable.play);
-                } else {
+                    playButton.setBackgroundResource(playImageId);
+                }
+                else
+                {
                     startListeningProgress();
                     play();
-                    playButton.setBackgroundResource(R.drawable.pause);
+                    playButton.setBackgroundResource(pauseImageId);
                 }
 
                 isPlay = !isPlay;
@@ -145,17 +173,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
             case R.id.meditationReplayButton:
 
-                stop();
-                play();
-                isReplay = true;
-                hideReplayButton();
-                progress = 0;
-                mProgressBar.setProgress(progress);
-                playButton.setBackgroundResource(R.drawable.pause);
-                isPlay = true;
-                canReplay = false;
-                stopListeningProgress();
-                startListeningProgress();
+                onReplayButtonClick();
 
                 break;
 
@@ -169,7 +187,12 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
             case R.id.meditationSettingsButton:
 
-                openSettBar();
+                if (isSettingsSubBar)
+                {
+
+                    openSettSubBar();
+
+                } else openSettBar();
 
                 break;
         }
@@ -183,6 +206,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         isPlay = false;
         melodyButton = null;
         isPlayerOnPause = false;
+        isSettingsSubBar = false;
         progress = 0;
         mainMediaPlayer = null;
         melodyPrepare();
@@ -191,8 +215,11 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         mProgressBar.setProgress(progress);
         mProgressBar.setSecondaryProgress(progressMax);
         shareButton.setEnabled(false);
-        shareButton.setBackgroundColor(Color.parseColor("#00000000"));
+        shareButton.setBackgroundColor(FULL_ALIGN_BACKGROUND_COLOR);
         volumeChangeBar.setProgress(3);
+        volume = volumeChangeBar.getProgress() * 20;
+
+        ((ImageView) meditationView.findViewById(R.id.meditationBackButtonSunImage)).setImageResource(sunIconId);
 
         mainViewFlipper.addView(meditationView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
@@ -200,7 +227,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         mainViewFlipper.showNext();
         mainViewFlipper.removeViewAt(0);
 
-        playButton.setBackgroundResource(R.drawable.play);
+        playButton.setBackgroundResource(playImageId);
         hideReplayButton();
 
     }
@@ -308,7 +335,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 if (msg.what == progressMax)
                 {
 
-                    playButton.setBackgroundResource(R.drawable.replay);
+                    playButton.setBackgroundResource(replayImageId);
                     hideReplayButton();
                     progress = 0;
                     mProgressBar.setProgress(progress);
@@ -318,6 +345,15 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                     canReplay = false;
                     isReplay = true;
                     progressBarWork = false;
+                    if (secondMediaPlayer != null)
+                    {
+
+                        secondMediaPlayer.stop();
+                        secondMediaPlayer.release();
+                        secondMediaPlayer = null;
+
+                    }
+                    stop();
 
                 } else {
 
@@ -357,14 +393,14 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
     void hideReplayButton() {
 
-        replayButton.setBackgroundColor(Color.parseColor("#00000000"));
+        replayButton.setBackgroundColor(FULL_ALIGN_BACKGROUND_COLOR);
         replayButton.setEnabled(false);
 
     }
 
     void showReplayButton() {
 
-        replayButton.setBackgroundResource(R.drawable.replay);
+        replayButton.setBackgroundResource(replayImageId);
         replayButton.setEnabled(true);
         replayButton.setOnClickListener(MeditationManger.this);
 
@@ -375,11 +411,12 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         if (!isPlayerOnPause)
         {
 
-            Uri melodyUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + resId);
+            melodyUri = Uri.parse(RES_PATH + context.getPackageName() + DIR_SEPARATOR + resId);
 
             try {
                 mainMediaPlayer = new MediaPlayer();
                 mainMediaPlayer.setDataSource(context, melodyUri);
+                mainMediaPlayer.setVolume(volume, volume);
                 mainMediaPlayer.prepare();
                 mainMediaPlayer.start();
             } catch (IOException e) {
@@ -390,6 +427,12 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
             mainMediaPlayer.start();
 
+        }
+
+        if (secondMediaPlayer != null)
+        {
+            mainMediaPlayer.setVolume(0, 0);
+            secondMediaPlayer.start();
         }
 
         isPlayerOnPause = false;
@@ -413,6 +456,34 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             case R.id.meditationSettSubBarSeaButton:
                 secondResId = R.raw.sea;
                 break;
+
+        }
+
+    }
+
+    private void secondMediaPlayerStart() {
+
+        melodyUri = Uri.parse(RES_PATH + context.getPackageName() + DIR_SEPARATOR + secondResId);
+
+        if (secondMediaPlayer == null)
+        {
+
+            try {
+                secondMediaPlayer = new MediaPlayer();
+                secondMediaPlayer.setDataSource(context, melodyUri);
+                secondMediaPlayer.setVolume(volume, volume);
+                secondMediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if (isPlay && mainMediaPlayer != null)
+        {
+
+            mainMediaPlayer.setVolume(0, 0);
+            secondMediaPlayer.start();
 
         }
 
@@ -450,6 +521,13 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
         }
 
+        if (secondMediaPlayer != null)
+        {
+
+            secondMediaPlayer.pause();
+
+        }
+
     }
 
     public void stop() {
@@ -470,27 +548,35 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
         setMelodyButton(v);
         secondMelodyPrepare();
+        secondMediaPlayerStart();
 
-//        Uri melodyUri = Uri.parse("android.resource://" + context.getPackageName() + "/" + secondResId);
-//
-//        try {
-//            secondMediaPlayer = new MediaPlayer();
-//            secondMediaPlayer.setDataSource(context, melodyUri);
-//            secondMediaPlayer.prepare();
-//            secondMediaPlayer.start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    }
+
+    private void onReplayButtonClick() {
+
+        stop();
+        play();
+        isReplay = true;
+        hideReplayButton();
+        progress = 0;
+        mProgressBar.setProgress(progress);
+        playButton.setBackgroundResource(pauseImageId);
+        isPlay = true;
+        canReplay = false;
+        stopListeningProgress();
+        startListeningProgress();
 
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+        volume = progress * 20;
+
         if (mainMediaPlayer != null)
         {
 
-            mainMediaPlayer.setVolume(progress * 20, progress * 20);
+            mainMediaPlayer.setVolume(volume, volume);
 
         }
 
