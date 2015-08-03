@@ -12,15 +12,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onClick"
-            android:id="@+id/closeButton">
+            android:id="@+id/closeButton"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
 
             <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:id="@+id/mainBackButtonSunImage"
                 android:src="@drawable/sun_noon"
                 android:minHeight="100dp"
-                android:clickable="false"/>
+                android:clickable="false"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,27 +35,28 @@
         </RelativeLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="150dp"
             android:id="@+id/mainSunImage"
-            android:background="@drawable/sun_noon"
             android:layout_alignRight="@+id/mainScreenLogo"
             android:layout_alignEnd="@+id/mainScreenLogo"
             android:layout_alignLeft="@+id/mainScreenLogo"
             android:layout_alignStart="@+id/mainScreenLogo"
             android:layout_marginTop="50dp"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:scaleType="fitCenter"/>
 
         <ImageView
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="125dp"
             android:id="@+id/mainScreenLogo"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/logo"
             android:onClick="onClick"
             android:focusableInTouchMode="false"
             android:layout_below="@+id/closeButton"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -192,7 +196,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/kids"
                     android:id="@+id/textView18"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#fffd8401"/>
             </LinearLayout>
 
         </LinearLayout>

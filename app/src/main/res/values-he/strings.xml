@@ -45,5 +45,14 @@
         <item>http://www.hebpsy.net/articles.asp?id=2654</item>
         <item>http://www.mindfulexperience.org/</item>
     </string-array>
+    <string name="purchaseMeditationMessage">נהנים מהמדיטציה?
+
+האפליקציה מגיעה בחינם עם מדיטציה של 5 דקות.
+
+כדי להנות משאר המדיטציות, יש לרכוש את החבילה המלאה.
+
+הרכישה היא חד-פעמית, והיא מספקת גישה לכל המדיטציות באפליקציה, בעבור 7.90 ש״ח בלבד.</string>
+    <string name="purchaseButton">לחצו כאן לרכישה</string>
+    <string name="restorePurchaseButton">רכשתם בעבר?</string>
 
 </resources>

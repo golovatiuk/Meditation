@@ -23,8 +23,8 @@
             android:gravity="center_horizontal">
 
             <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/settingsInfoButton"
                 android:src="@drawable/chosen_about"
                 android:background="@drawable/main_drawer_button_background"
@@ -49,8 +49,8 @@
             android:gravity="center_horizontal">
 
             <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/settingsLanguageButton"
                 android:src="@drawable/chosen_language"
                 android:background="@drawable/main_drawer_button_background"
@@ -76,8 +76,8 @@
             android:gravity="center_horizontal">
 
             <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/settingsShareButton"
                 android:src="@drawable/chosen_share"
                 android:background="@drawable/main_drawer_button_background"
@@ -102,8 +102,8 @@
             android:gravity="center_horizontal">
 
             <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/settingsRemindersButton"
                 android:background="@drawable/main_drawer_button_background"
                 android:onClick="onClick"

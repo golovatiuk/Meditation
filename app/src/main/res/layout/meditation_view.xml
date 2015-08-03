@@ -11,7 +11,9 @@
             android:layout_width="75dp"
             android:layout_height="76dp"
             android:onClick="onClick"
-            android:id="@+id/meditationBackButton">
+            android:id="@+id/meditationBackButton"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -37,13 +39,20 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/meditationSettingsButton"
-            android:onClick="onClick"
             android:background="@drawable/drawer_handle"
             android:layout_marginBottom="25dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>
 
-        <ImageButton
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/meditationSettingsLL">
+    </LinearLayout>
+
+    <ImageButton
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:id="@+id/meditationPlayButton"
@@ -90,12 +99,4 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/meditationSettingsLL">
-        </LinearLayout>
-
-    </RelativeLayout>
+</RelativeLayout>

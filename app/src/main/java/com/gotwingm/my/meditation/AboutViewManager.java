@@ -1,5 +1,6 @@
 package com.gotwingm.my.meditation;
 
+import android.text.method.ScrollingMovementMethod;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -18,11 +19,13 @@ public class AboutViewManager extends MainActivity implements View.OnClickListen
     static float toY;
     ViewFlipper aboutViewFlipper;
     View linksView;
+    View textView;
 
     AboutViewManager() {
 
         aboutViewFlipper = (ViewFlipper) aboutView.findViewById(R.id.aboutViewFlipper);
         linksView = layoutInflater.inflate(R.layout.about_links, null);
+        textView = layoutInflater.inflate(R.layout.about_text, null);
 
         linksView.findViewById(R.id.link0).setOnClickListener(AboutViewManager.this);
         linksView.findViewById(R.id.link1).setOnClickListener(AboutViewManager.this);
@@ -84,7 +87,7 @@ public class AboutViewManager extends MainActivity implements View.OnClickListen
 
         mainViewFlipper.addView(aboutView);
 
-        aboutViewFlipper.addView(layoutInflater.inflate(R.layout.about_text, null));
+        aboutViewFlipper.addView(textView);
         aboutViewFlipper.addView(linksView);
         aboutViewFlipper.addView(layoutInflater.inflate(R.layout.about_credits, null));
         aboutViewFlipper.setOnTouchListener(AboutViewManager.this);
@@ -99,6 +102,17 @@ public class AboutViewManager extends MainActivity implements View.OnClickListen
             case MotionEvent.ACTION_DOWN:
                 fromX = event.getX();
                 fromY = event.getY();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                toX = event.getX();
+                toY = event.getY();
+
+                if ((Math.abs(fromX - toX)) < (Math.abs(fromY - toY)))
+                {
+
+                    ((TextView) textView.findViewById(R.id.aboutText)).setMovementMethod(new ScrollingMovementMethod());
+                }
                 break;
 
             case MotionEvent.ACTION_UP:

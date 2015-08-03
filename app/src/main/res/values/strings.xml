@@ -69,4 +69,11 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
     <string name="creditsDevelopment" translatable="false">Development: <b>Dan Caspi</b></string>
     <string name="creditsMusic" translatable="false">Music: <b>Roy Dahan</b></string>
 
+    <string name="purchaseMeditationMessage">Enjoy meditating?\n\n
+The app comes free with the 5 minutes meditation.\n
+To enjoy the rest of the meditations, and the full features of the app, please purchase the full pack.\n\n
+The purchase is a one-time purchase, and it gives you access to all of the meditations in the app, for just 1.99$.</string>
+    <string name="purchaseButton">Click here to purchase</string>
+    <string name="restorePurchaseButton">Purchased in the past?</string>
+
 </resources>

@@ -15,7 +15,7 @@
         android:onClick="onClick"
         android:background="@drawable/main_drawer_button_background"
         android:src="@drawable/x"
-        />
+        android:scaleType="fitCenter"/>
 
     <ImageView
         android:layout_width="229dp"

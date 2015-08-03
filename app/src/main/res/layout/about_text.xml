@@ -18,7 +18,9 @@
             android:layout_height="wrap_content"
             android:text="@string/about_text"
             android:id="@+id/aboutText"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:nestedScrollingEnabled="true"
+            android:scrollbarAlwaysDrawHorizontalTrack="true"/>
     <!--</ScrollView>-->
 
 </RelativeLayout>

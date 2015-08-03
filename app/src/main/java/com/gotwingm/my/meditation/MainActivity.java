@@ -284,7 +284,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
             case R.id.kids:
 
-                timer = 0;
+                timer = 5;
 
                 mMeditationManger.makeMeditationView();
 
@@ -294,8 +294,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     public void makeMainView() {
 
+        meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
         View mainView = layoutInflater.inflate(R.layout.main_view, null);
-        mainView.findViewById(R.id.mainScreenLogo).setBackgroundResource(sunIconId);
+        ((ImageView) mainView.findViewById(R.id.mainSunImage)).setImageResource(sunIconId);
         mainView.findViewById(R.id.mainBackButtonSunImage).setBackgroundResource(sunIconId);
         ((ImageView) mainView.findViewById(R.id.kidImageView)).setImageResource(kidIconId);
 
