@@ -20,7 +20,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:id="@+id/mainBackButtonSunImage"
-                android:src="@drawable/sun_noon"
+                android:src="@drawable/general_sun_noon"
                 android:minHeight="100dp"
                 android:clickable="false"
                 />
@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"
+                android:text="@string/backButtonLabel"
                 android:id="@+id/textView17"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
@@ -38,25 +38,23 @@
             android:layout_width="200dp"
             android:layout_height="150dp"
             android:id="@+id/mainSunImage"
-            android:layout_alignRight="@+id/mainScreenLogo"
-            android:layout_alignEnd="@+id/mainScreenLogo"
-            android:layout_alignLeft="@+id/mainScreenLogo"
-            android:layout_alignStart="@+id/mainScreenLogo"
-            android:layout_marginTop="50dp"
             android:focusableInTouchMode="false"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter"
+            android:layout_alignBottom="@+id/mainScreenLogo"
+            android:layout_alignLeft="@+id/mainScreenLogo"
+            android:layout_alignStart="@+id/mainScreenLogo"/>
 
         <ImageView
             android:layout_width="200dp"
             android:layout_height="125dp"
             android:id="@+id/mainScreenLogo"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/logo"
+            android:src="@drawable/general_logo"
             android:onClick="onClick"
             android:focusableInTouchMode="false"
+            android:scaleType="fitCenter"
             android:layout_below="@+id/closeButton"
-            android:layout_centerHorizontal="true"
-            android:scaleType="fitCenter"/>
+            android:layout_centerHorizontal="true"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -65,10 +63,11 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:id="@+id/linearLayout3"
-            android:layout_alignParentLeft="false"
+            android:gravity="center"
+            android:layout_above="@+id/meditationSettingsButton"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:gravity="center">
+            android:layout_marginBottom="25dp">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -188,7 +187,7 @@
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:id="@+id/kidImageView"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/smiley_noon"
+                    android:src="@drawable/general_smiley_noon"
                     android:layout_marginBottom="4dp"/>
 
                 <TextView
@@ -207,11 +206,10 @@
             android:layout_height="50dp"
             android:id="@+id/meditationSettingsButton"
             android:onClick="onClick"
-            android:background="@drawable/drawer_handle"
+            android:background="@drawable/general_sett_bar_handler"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginBottom="40dp"/>
 
         <ViewFlipper
             android:id="@+id/settingsFlipper"

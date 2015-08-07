@@ -11,8 +11,8 @@
         android:layout_height="40dp"
         android:id="@+id/shareCloseButton"
         android:onClick="onClick"
-        android:background="@drawable/main_drawer_button_background"
-        android:src="@drawable/x"
+        android:background="@drawable/general_button_background"
+        android:src="@drawable/general_close_btt"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"/>
 
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/langSettSeparator1"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/drawer_separator"
+        android:src="@drawable/general_sett_bar_separator"
         android:paddingLeft="40sp"
         android:paddingRight="40sp"/>
 
@@ -76,7 +76,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/facebookShareButton"
-                android:background="@drawable/facebook"
+                android:background="@drawable/share_facebook"
                 android:layout_marginBottom="5sp"
                 android:onClick="onClick"/>
 
@@ -84,7 +84,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:id="@+id/twitterShareButton"
-                android:background="@drawable/twitter"
+                android:background="@drawable/share_twitter"
                 android:layout_marginTop="5sp"
                 android:onClick="onClick"/>
 
