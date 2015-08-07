@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -17,55 +18,42 @@ import android.widget.SeekBar;
 
 import java.io.IOException;
 
-/**
- *
- * @version 07.08.2015
- * @author Nickolay Golovatiuk
- */
-
 public class MeditationManger extends MainActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener {
 
     private static final int FULL_ALIGN_BACKGROUND_COLOR = Color.parseColor("#00000000");
 
-    public static MediaPlayer mainMediaPlayer;
-    public static MediaPlayer secondMediaPlayer;
+    Uri mainMelodyUri;
+    Uri secondMelodyUri;
+    int resId;
+    int secondResId;
+    boolean isPlayerOnPause;
+    boolean progressBarWork;
+    boolean isReplay;
+    boolean canReplay;
+    boolean isPlay;
+    boolean isSettingsSubBar;
+    int progress;
+    int progressMax;
+    int MPPosition;
+    Thread mThread;
+    android.os.Handler mHandler;
 
-    public boolean isPlay;
-    public boolean canReplay;
-    public boolean progressBarWork;
-    public LinearLayout settingsBarLinearLayout;
-
-    private int resId;
-    private int secondResId;
-    private boolean isPlayerOnPause;
-    private boolean isReplay;
-    private boolean isSettingsSubBar;
-    private int progress;
-    private int progressMax;
-    private int MPPosition;
-    private Thread mThread;
-    private android.os.Handler mHandler;
-    private ProgressBar mProgressBar;
-    private View meditationSettingsBar;
-    private View meditationSettingsSubBar;
-    private View meditationVolumeBar;
-    private ImageView replayButton;
-    private ImageView shareButton;
-    private ImageButton okButton;
-    private ImageButton xButton;
-    private ImageButton playButton;
-    private SeekBar volumeChangeBar;
-    private static View melodyButton;
+    MediaPlayer mainMediaPlayer;
+    MediaPlayer secondMediaPlayer;
+    ProgressBar mProgressBar;
+    LinearLayout mLinearLayout;
+    View meditationSettingsBar;
+    View meditationSettingsSubBar;
+    View meditationVolumeBar;
+    ImageView replayButton;
+    ImageView shareButton;
+    ImageButton okButton;
+    ImageButton xButton;
+    ImageButton playButton;
+    SeekBar volumeChangeBar;
+    static View melodyButton;
 
     MeditationManger() {
-        mThread = null;
-        canReplay = false;
-        isPlay = false;
-        melodyButton = null;
-        isPlayerOnPause = false;
-        isSettingsSubBar = false;
-        progress = 0;
-        mainMediaPlayer = null;
     }
 
     @Override
@@ -73,7 +61,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
         switch (v.getId()) {
             case R.id.meditationRelativeLayout:
-                settingsBarLinearLayout.removeAllViews();
+                mLinearLayout.removeAllViews();
                 break;
 
             case R.id.meditationSettBarOKButton:
@@ -81,10 +69,11 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 isSettingsSubBar = false;
 
                 if (secondMediaPlayer != null) {
+                    MPPosition += secondMediaPlayer.getCurrentPosition();
                     secondMediaPlayer.stop();
                     secondMediaPlayer.release();
                     secondMediaPlayer = null;
-                    melodyButton.setBackgroundResource(R.drawable.general_button_background);
+                    melodyButton.setBackgroundResource(R.drawable.main_drawer_button_background);
                 }
 
                 if (mainMediaPlayer != null) {
@@ -133,9 +122,13 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 }
 
                 if (isPlay) {
-                    stopListening();
+                    stopListeningProgress();
+                    pause();
+                    playButton.setBackgroundResource(playImageId);
                 } else {
-                    startListening();
+                    startListeningProgress();
+                    play();
+                    playButton.setBackgroundResource(pauseImageId);
                 }
 
                 isPlay = !isPlay;
@@ -162,22 +155,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         }
     }
 
-    public void stopListening() {
-
-        stopListeningProgress();
-        pause();
-        playButton.setBackgroundResource(playImageId);
-
-    }
-
-    public void startListening() {
-
-        startListeningProgress();
-        play();
-        playButton.setBackgroundResource(pauseImageId);
-
-    }
-
     public void makeMeditationView() {
 
         mHandler = myHandler();
@@ -194,11 +171,9 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         meditationView.findViewById(R.id.meditationSettingsButton).setOnClickListener(MeditationManger.this);
         meditationView.findViewById(R.id.meditationRelativeLayout).setOnClickListener(MeditationManger.this);
 
-
         mProgressBar = (ProgressBar) meditationView.findViewById(R.id.progressBar);
-        settingsBarLinearLayout = (LinearLayout) meditationView.findViewById(R.id.meditationSettingsLL);
+        mLinearLayout = (LinearLayout) meditationView.findViewById(R.id.meditationSettingsLL);
         volumeChangeBar = (SeekBar) meditationVolumeBar.findViewById(R.id.volumeBar);
-        settingsBarLinearLayout.findViewById(R.id.meditationSettingsLL).setOnClickListener(MeditationManger.this);
 
         if (timer == 10 || timer == 20) {
             mainViewFlipper.addView(meditationView);
@@ -217,7 +192,14 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             meditationView.findViewById(R.id.meditationSettingsButton).setEnabled(false);
 
         } else {
-
+            mThread = null;
+            canReplay = false;
+            isPlay = false;
+            melodyButton = null;
+            isPlayerOnPause = false;
+            isSettingsSubBar = false;
+            progress = 0;
+            mainMediaPlayer = null;
             melodyPrepare();
             progressMax = MainActivity.timer * 60;
             mProgressBar.setMax(progressMax);
@@ -248,9 +230,9 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         okButton = (ImageButton) meditationSettingsBar.findViewById(R.id.meditationSettBarOKButton);
         xButton = (ImageButton) meditationSettingsBar.findViewById(R.id.meditationSettBarXButton);
 
-        settingsBarLinearLayout.removeAllViews();
-        settingsBarLinearLayout.addView(meditationSettingsBar);
-        settingsBarLinearLayout.addView(meditationVolumeBar);
+        mLinearLayout.removeAllViews();
+        mLinearLayout.addView(meditationSettingsBar);
+        mLinearLayout.addView(meditationVolumeBar);
 
         okButton.setEnabled(false);
         xButton.setEnabled(true);
@@ -259,17 +241,17 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         xButton.setOnClickListener(MeditationManger.this);
         volumeChangeBar.setOnSeekBarChangeListener(MeditationManger.this);
 
-        okButton.setBackgroundResource(R.drawable.general_chosen_button_background);
-        xButton.setBackgroundResource(R.drawable.general_button_background);
+        okButton.setBackgroundResource(R.drawable.main_drawer_chosen_button_background);
+        xButton.setBackgroundResource(R.drawable.main_drawer_button_background);
 
     }
 
     private void openSettSubBar() {
 
-        settingsBarLinearLayout.removeAllViews();
-        settingsBarLinearLayout.addView(meditationSettingsBar);
-        settingsBarLinearLayout.addView(meditationSettingsSubBar);
-        settingsBarLinearLayout.addView(meditationVolumeBar);
+        mLinearLayout.removeAllViews();
+        mLinearLayout.addView(meditationSettingsBar);
+        mLinearLayout.addView(meditationSettingsSubBar);
+        mLinearLayout.addView(meditationVolumeBar);
 
         okButton.setEnabled(true);
         xButton.setEnabled(false);
@@ -281,25 +263,25 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         meditationSettingsSubBar.findViewById(R.id.meditationSettSubBarBirdButton).setOnClickListener(MeditationManger.this);
         meditationSettingsSubBar.findViewById(R.id.meditationSettSubBarSeaButton).setOnClickListener(MeditationManger.this);
 
-        okButton.setBackgroundResource(R.drawable.general_button_background);
-        xButton.setBackgroundResource(R.drawable.general_chosen_button_background);
+        okButton.setBackgroundResource(R.drawable.main_drawer_button_background);
+        xButton.setBackgroundResource(R.drawable.main_drawer_chosen_button_background);
 
         if (melodyButton != null) {
-            melodyButton.setBackgroundResource(R.drawable.general_chosen_button_background);
+            melodyButton.setBackgroundResource(R.drawable.main_drawer_chosen_button_background);
         }
     }
 
     private void setMelodyButton(View v) {
 
         if (melodyButton != null) {
-            melodyButton.setBackgroundResource(R.drawable.general_button_background);
+            melodyButton.setBackgroundResource(R.drawable.main_drawer_button_background);
         }
 
         melodyButton = v;
-        melodyButton.setBackgroundResource(R.drawable.general_chosen_button_background);
+        melodyButton.setBackgroundResource(R.drawable.main_drawer_chosen_button_background);
     }
 
-    public void stopListeningProgress() {
+    private void stopListeningProgress() {
 
         if (mThread != null && mThread.isAlive()) {
             progressBarWork = false;
@@ -345,7 +327,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 } else {
                     progress = msg.what;
                     mProgressBar.setProgress(progress);
-                    MPPosition = progress * 1000;
                 }
             }
         };
@@ -373,14 +354,14 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
     }
 
-    private void hideReplayButton() {
+    void hideReplayButton() {
 
         replayButton.setBackgroundColor(FULL_ALIGN_BACKGROUND_COLOR);
         replayButton.setEnabled(false);
 
     }
 
-    private void showReplayButton() {
+    void showReplayButton() {
 
         replayButton.setBackgroundResource(replayImageId);
         replayButton.setEnabled(true);
@@ -389,8 +370,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
     }
 
     private void play() {
-
-        Uri mainMelodyUri;
 
         if (secondMediaPlayer == null) {
             if (!isPlayerOnPause) {
@@ -411,7 +390,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 mainMediaPlayer.start();
             }
         } else {
-            backgroundAudioPlayer.pause();
             secondMediaPlayer.start();
         }
 
@@ -443,8 +421,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
     private void secondMediaPlayerStart() {
 
-        Uri secondMelodyUri;
-
         secondMelodyUri = Uri.parse(RES_PATH + context.getPackageName() + DIR_SEPARATOR + secondResId);
 
         if (secondMediaPlayer == null) {
@@ -457,6 +433,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             }
 
         } else {
+            MPPosition += secondMediaPlayer.getCurrentPosition();
             try {
                 secondMediaPlayer.stop();
                 secondMediaPlayer.release();
@@ -472,6 +449,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             secondMediaPlayer.start();
 
             if (mainMediaPlayer != null) {
+                MPPosition += mainMediaPlayer.getCurrentPosition();
                 mainMediaPlayer.pause();
             }
         }
@@ -500,19 +478,31 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
     }
 
-    public void pause() {
+    private void pause() {
 
         backgroundAudioPlayer.start();
 
-        if (mainMediaPlayer != null && mainMediaPlayer.isPlaying()) {
+        if (mainMediaPlayer.isPlaying()) {
             mainMediaPlayer.pause();
+            MPPosition = mainMediaPlayer.getCurrentPosition();
             isPlayerOnPause = true;
         }
 
         if (secondMediaPlayer != null) {
+            MPPosition = mainMediaPlayer.getCurrentPosition();
             secondMediaPlayer.pause();
         }
 
+    }
+
+    public void stop() {
+
+        if ((mainMediaPlayer != null) && (mainMediaPlayer.isPlaying() || isPlayerOnPause)) {
+            mainMediaPlayer.stop();
+            mainMediaPlayer.release();
+            mainMediaPlayer = null;
+            isPlayerOnPause = false;
+        }
     }
 
     private void onMelodyChooseButtonClick(View v) {
@@ -536,17 +526,6 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         canReplay = false;
         stopListeningProgress();
         startListeningProgress();
-    }
-
-    public void stop() {
-
-        if ((mainMediaPlayer != null) && (mainMediaPlayer.isPlaying() || isPlayerOnPause)) {
-            mainMediaPlayer.stop();
-            mainMediaPlayer.release();
-            mainMediaPlayer = null;
-            isPlayerOnPause = false;
-        }
-        backgroundAudioPlayer.start();
     }
 
     @Override
