@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/meditationBackButtonSunImage"
-                android:src="@drawable/general_sun_noon"
+                android:src="@drawable/sun_noon"
                 android:minHeight="100dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/backButtonLabel"
+                android:text="back"
                 android:id="@+id/textView17"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
@@ -39,7 +39,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/meditationSettingsButton"
-            android:background="@drawable/general_sett_bar_handler"
+            android:background="@drawable/drawer_handle"
             android:layout_marginBottom="25dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>
@@ -51,7 +51,7 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:focusableInTouchMode="false"
-            android:background="@drawable/meditation_play"/>
+            android:background="@drawable/play"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:id="@+id/progressBar"
-            android:progressDrawable="@drawable/meditation_circular_progress_bar"
+            android:progressDrawable="@drawable/circular"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
