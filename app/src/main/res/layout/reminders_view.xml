@@ -11,8 +11,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:id="@+id/remindersManagerCloseButton"
-        android:background="@drawable/main_drawer_button_background"
-        android:src="@drawable/x"
+        android:background="@drawable/general_button_background"
+        android:src="@drawable/general_close_btt"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:onClick="onClick"/>
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/langSettSeparator1"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/drawer_separator"
+        android:src="@drawable/general_sett_bar_separator"
         android:layout_margin="5dp"/>
 
     <LinearLayout
@@ -166,7 +166,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/remindersKidIcon"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/smiley_noon"
+                android:src="@drawable/general_smiley_noon"
                 android:layout_marginBottom="4dp"/>
 
             <TextView
@@ -184,7 +184,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/langSettSeparator2"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/drawer_separator"
+        android:src="@drawable/general_sett_bar_separator"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:layout_margin="5dp"/>
@@ -215,7 +215,7 @@
             android:layout_height="50sp"
             android:id="@+id/day1"
             android:text="@string/day1"
-            android:background="@drawable/main_drawer_button_background"
+            android:background="@drawable/general_button_background"
             android:layout_weight="1"/>
 
         <Button
@@ -224,7 +224,7 @@
             android:id="@+id/day2"
             android:layout_weight="1"
             android:text="@string/day2"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
 
         <Button
             android:layout_width="match_parent"
@@ -232,7 +232,7 @@
             android:id="@+id/day3"
             android:layout_weight="1"
             android:text="@string/day3"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
 
         <Button
             android:layout_width="match_parent"
@@ -240,7 +240,7 @@
             android:id="@+id/day4"
             android:layout_weight="1"
             android:text="@string/day4"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
 
         <Button
             android:layout_width="match_parent"
@@ -248,7 +248,7 @@
             android:id="@+id/day5"
             android:layout_weight="1"
             android:text="@string/day5"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
 
         <Button
             android:layout_width="match_parent"
@@ -256,7 +256,7 @@
             android:id="@+id/day6"
             android:layout_weight="1"
             android:text="@string/day6"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
 
         <Button
             android:layout_width="match_parent"
@@ -264,7 +264,7 @@
             android:id="@+id/day7"
             android:layout_weight="1"
             android:text="@string/day7"
-            android:background="@drawable/main_drawer_button_background"/>
+            android:background="@drawable/general_button_background"/>
     </LinearLayout>
 
     <ImageView
@@ -272,7 +272,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/langSettSeparator3"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/drawer_separator"
+        android:src="@drawable/general_sett_bar_separator"
         android:paddingLeft="40dp"
         android:paddingRight="40dp"
         android:layout_margin="5dp"/>
@@ -293,7 +293,7 @@
         android:layout_height="50sp"
         android:id="@+id/remindersTimePickerButton"
         android:layout_gravity="center_horizontal"
-        android:background="@drawable/main_drawer_chosen_button_background"
+        android:background="@drawable/general_chosen_button_background"
         android:textStyle="bold"/>
 
     <LinearLayout
