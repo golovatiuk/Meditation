@@ -31,7 +31,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import reminder.RemindersManager;
+import com.gotwingm.my.meditation.reminder.RemindersManager;
 
 /**
  * Class of the Main Activity.
