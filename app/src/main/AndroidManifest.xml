@@ -20,11 +20,7 @@
         </activity>
 
         <receiver
-<<<<<<< HEAD
             android:name=".reminder.RemindersReceiver"
-=======
-            android:name=".MeditationReceiver"
->>>>>>> parent of 61e9f17... 07.08
             android:enabled="true"
             android:exported="true" >
         </receiver>

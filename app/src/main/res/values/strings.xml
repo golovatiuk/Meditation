@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Meditation</string>
-
     <string name="action_settings">Settings</string>
-
     <string name="browserClose">Close</string>
-
+    <string name="backButtonLabel">back</string>
 
     <string name="about_text">
 Meditation is unique tool for self-practice that expands awareness, lets us reconnect with our body and deepens our self-knowledge.\n\n
@@ -43,6 +41,8 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
 
     <string name="shareTitle">Share</string>
     <string name="shareSubTitle">Share a thought with the world…</string>
+    <string name="postingFailedTitle" translatable="false">Posting Failed</string>
+    <string name="postingFailedMessage" translatable="false">Can\'t find a right launcher for this operation.</string>
 
     <string name="reminderTitle">Reminders</string>
     <string name="whichDays">Which Days?</string>
