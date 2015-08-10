@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Locale;
 
 import com.gotwingm.my.meditation.reminder.RemindersManager;
+import com.gotwingm.my.meditation.util.IabHelper;
+import com.gotwingm.my.meditation.util.IabResult;
+import com.gotwingm.my.meditation.util.Purchase;
 
 /**
  * Class of the Main Activity.
@@ -41,7 +44,6 @@ import com.gotwingm.my.meditation.reminder.RemindersManager;
  */
 public class MainActivity extends Activity implements View.OnClickListener, SurfaceHolder.Callback {
 
-
     /** Raw resources path for uri parse */
     public static final String RES_PATH = "android.resource://";
 
@@ -50,6 +52,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     /** Intent string extra key */
     public static final String STRING_EXTRA = "string extra";
+
+    public static final String ITEM_SKU = "meditation.purchase";
 
     /** Duration of meditation */
     public static int timer;
@@ -96,6 +100,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     /** Meditation screen View */
     public static View meditationView;
 
+    public static View mainSettingsBarView;
+
+    /** Locale change view */
+    public static View languageChangeView;
+
     /** Application Context */
     public static Context context;
 
@@ -108,8 +117,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     /** Background video's MediaPlayer */
     private static MediaPlayer backgroundVideoPlayer;
 
-    private static Locale locale;
-
     /** Object of ReminderManager class */
     private RemindersManager mRemindersManager;
 
@@ -121,6 +128,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     /** Background video's SurfaceHolder */
     private SurfaceHolder mSurfaceHolder;
+
+    private IabHelper mIabHelper;
+
+    private String base64EncodedPublicKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +146,39 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         context = MainActivity.this;
         timeOfADayUiChange();
         prepareBackgroundVideo();
+
+/*
+        mIabHelper = new IabHelper(context, base64EncodedPublicKey);
+        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                //Handle result
+                if (!result.isSuccess()) {
+                    Log.d("###", "In-app Billing setup is failed: " + result);
+                } else {
+                    Log.d("###", "In-app Billing set up is OK!");
+                }
+            }
+        });
+*/
+
+/*
+        IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener =
+                new IabHelper.OnIabPurchaseFinishedListener() {
+                    @Override
+                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                        if (result.isFailure()) {
+                            //error
+                            return;
+                        } else {
+                            if (info.getSku().equals(ITEM_SKU)) {
+                                //Open 10's & 20's minutes meditation
+                                purchase();
+                            }
+                        }
+                    }
+                };
+*/
 
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
         layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -157,6 +201,76 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         } else {
             mAboutViewManager.makeAboutView();
         }
+    }
+
+    /**
+     * Called when an activity you launched exits, giving you the requestCode
+     * you started it with, the resultCode it returned, and any additional
+     * data from it.  The <var>resultCode</var> will be
+     * {@link #RESULT_CANCELED} if the activity explicitly returned that,
+     * didn't return any result, or crashed during its operation.
+     * <p/>
+     * <p>You will receive this call immediately before onResume() when your
+     * activity is re-starting.
+     * <p/>
+     * <p>This method is never invoked if your activity sets
+     * {@link android.R.styleable#AndroidManifestActivity_noHistory noHistory} to
+     * <code>true</code>.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode  The integer result code returned by the child activity
+     *                    through its setResult().
+     * @param data        An Intent, which can return result data to the caller
+     *                    (various data can be attached to Intent "extras").
+     * @see #startActivityForResult
+     * @see #createPendingResult
+     * @see #setResult(int)
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (!mIabHelper.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+//        }
+    }
+
+    /**
+     * Perform any final cleanup before an activity is destroyed.  This can
+     * happen either because the activity is finishing (someone called
+     * {@link #finish} on it, or because the system is temporarily destroying
+     * this instance of the activity to save space.  You can distinguish
+     * between these two scenarios with the {@link #isFinishing} method.
+     * <p/>
+     * <p><em>Note: do not count on this method being called as a place for
+     * saving data! For example, if an activity is editing data in a content
+     * provider, those edits should be committed in either {@link #onPause} or
+     * {@link #onSaveInstanceState}, not here.</em> This method is usually implemented to
+     * free resources like threads that are associated with an activity, so
+     * that a destroyed activity does not leave such things around while the
+     * rest of its application is still running.  There are situations where
+     * the system will simply kill the activity's hosting process without
+     * calling this method (or any others) in it, so it should not be used to
+     * do things that are intended to remain around after the process goes
+     * away.
+     * <p/>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onPause
+     * @see #onStop
+     * @see #finish
+     * @see #isFinishing
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+/*        if (mIabHelper != null) {
+            mIabHelper.dispose();
+        }
+        mIabHelper = null; */
     }
 
     /**
@@ -262,7 +376,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.settingsLanguageButton:
-                mainViewFlipper.addView(layoutInflater.inflate(R.layout.settings_language_view, null));
+                mainViewFlipper.addView(languageChangeView);
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
                 break;
@@ -330,9 +444,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
             case R.id.closeButton:
                 finish();
 
-            case R.id.meditationSettingsButton:
+            case R.id.mainSettingsButton:
+                languageChangeView = layoutInflater.inflate(R.layout.settings_language_view, null);
+                mainSettingsBarView = layoutInflater.inflate(R.layout.main_settings_bar, null);
                 settingsFlipper = (ViewFlipper) findViewById(R.id.settingsFlipper);
-                settingsFlipper.addView(layoutInflater.inflate(R.layout.main_settings_bar, null));
+                settingsFlipper.addView(mainSettingsBarView);
                 settingsFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_in));
                 settingsFlipper.showNext();
                 break;
@@ -510,22 +626,30 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     private void changeLocation(View langButton) {
 
         String location = null;
-        Configuration configuration = new Configuration();
+        Locale locale;
+        Configuration configuration;
 
         switch (langButton.getId()) {
             case R.id.englishSettingsButton:
                 location = "en";
+                languageChangeView.findViewById(R.id.alephSettingsButton)
+                        .setBackgroundResource(R.drawable.general_button_background);
                 break;
             case R.id.alephSettingsButton:
                 location = "he";
+                languageChangeView.findViewById(R.id.englishSettingsButton)
+                        .setBackgroundResource(R.drawable.general_button_background);
                 break;
         }
+        langButton.setBackgroundResource(R.drawable.general_chosen_button_background);
 
         locale = new Locale(location);
         Locale.setDefault(locale);
+        configuration = new Configuration();
         configuration.locale = locale;
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
+        onConfigurationChanged(configuration);
     }
 
     /**
@@ -546,13 +670,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-
         super.onConfigurationChanged(newConfig);
-        if (locale != null) {
-            newConfig.locale = locale;
-            Locale.setDefault(locale);
-            context.getResources().updateConfiguration(newConfig, context.getResources().getDisplayMetrics());
-        }
     }
 
     /**

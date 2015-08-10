@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/aboutLabel"
-                android:id="@+id/textView"
+                android:id="@+id/aboutLabel"
                 android:gravity="center_horizontal"
                 android:textColor="#ff000000"/>
         </LinearLayout>

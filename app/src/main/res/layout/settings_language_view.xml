@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/language"
-        android:id="@+id/textView6"
+        android:id="@+id/language"
         android:layout_gravity="center_horizontal"
         style="@style/TitleTextStyle"
         android:layout_margin="25sp"/>

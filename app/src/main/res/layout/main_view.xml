@@ -39,10 +39,10 @@
             android:layout_height="150dp"
             android:id="@+id/mainSunImage"
             android:focusableInTouchMode="false"
-            android:scaleType="fitCenter"
             android:layout_alignBottom="@+id/mainScreenLogo"
             android:layout_alignLeft="@+id/mainScreenLogo"
-            android:layout_alignStart="@+id/mainScreenLogo"/>
+            android:layout_alignStart="@+id/mainScreenLogo"
+            android:scaleType="fitXY"/>
 
         <ImageView
             android:layout_width="200dp"
@@ -64,7 +64,7 @@
             android:paddingBottom="10dp"
             android:id="@+id/linearLayout3"
             android:gravity="center"
-            android:layout_above="@+id/meditationSettingsButton"
+            android:layout_above="@+id/mainSettingsButton"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="25dp">
@@ -204,7 +204,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/meditationSettingsButton"
+            android:id="@+id/mainSettingsButton"
             android:onClick="onClick"
             android:background="@drawable/general_sett_bar_handler"
             android:layout_alignParentBottom="true"

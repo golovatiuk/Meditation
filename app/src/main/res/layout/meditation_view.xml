@@ -38,7 +38,7 @@
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/meditationSettingsButton"
+            android:id="@+id/mainSettingsButton"
             android:background="@drawable/general_sett_bar_handler"
             android:layout_marginBottom="25dp"
             android:layout_alignParentBottom="true"
