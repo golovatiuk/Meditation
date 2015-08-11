@@ -152,6 +152,11 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                     openSettBar();
                 }
                 break;
+
+            case R.id.purchaseButton:
+                prepearPurchase();
+                onBuyClick();
+                break;
         }
     }
 
@@ -213,6 +218,8 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 
     private void showPurchaseScreen() {
 
+        View purchaseView;
+
         mainViewFlipper.addView(meditationView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
         mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
@@ -223,10 +230,16 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout)).removeViewAt(2);
         }
 
-        ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout))
-                .addView(layoutInflater.inflate(R.layout.purchase_view, null));
+        purchaseView = layoutInflater.inflate(R.layout.purchase_view, null);
+
+        ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout)).addView(purchaseView);
+
+        purchaseView.findViewById(R.id.purchaseButton).setOnClickListener(MeditationManger.this);
+        purchaseView.findViewById(R.id.restorePurchaseButton).setOnClickListener(MeditationManger.this);
+
         meditationView.findViewById(R.id.mainSettingsButton).setOnClickListener(MeditationManger.this);
         meditationView.findViewById(R.id.mainSettingsButton).setEnabled(false);
+
 
     }
 

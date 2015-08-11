@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -34,6 +35,7 @@ import java.util.Locale;
 import com.gotwingm.my.meditation.reminder.RemindersManager;
 import com.gotwingm.my.meditation.util.IabHelper;
 import com.gotwingm.my.meditation.util.IabResult;
+import com.gotwingm.my.meditation.util.Inventory;
 import com.gotwingm.my.meditation.util.Purchase;
 
 /**
@@ -130,8 +132,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     private SurfaceHolder mSurfaceHolder;
 
     private IabHelper mIabHelper;
-
-    private String base64EncodedPublicKey;
+    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,39 +147,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         context = MainActivity.this;
         timeOfADayUiChange();
         prepareBackgroundVideo();
-
-/*
-        mIabHelper = new IabHelper(context, base64EncodedPublicKey);
-        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            @Override
-            public void onIabSetupFinished(IabResult result) {
-                //Handle result
-                if (!result.isSuccess()) {
-                    Log.d("###", "In-app Billing setup is failed: " + result);
-                } else {
-                    Log.d("###", "In-app Billing set up is OK!");
-                }
-            }
-        });
-*/
-
-/*
-        IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener =
-                new IabHelper.OnIabPurchaseFinishedListener() {
-                    @Override
-                    public void onIabPurchaseFinished(IabResult result, Purchase info) {
-                        if (result.isFailure()) {
-                            //error
-                            return;
-                        } else {
-                            if (info.getSku().equals(ITEM_SKU)) {
-                                //Open 10's & 20's minutes meditation
-                                purchase();
-                            }
-                        }
-                    }
-                };
-*/
 
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
         layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -510,6 +478,44 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_out));
         mainViewFlipper.showNext();
 
+    }
+
+    protected void prepearPurchase() {
+
+        String base64EncodedPublicKey = "";
+
+        mIabHelper = new IabHelper(context, base64EncodedPublicKey);
+
+        mIabHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            @Override
+            public void onIabSetupFinished(IabResult result) {
+                if (!result.isSuccess()) {
+                    //handle error
+                    Log.d("###", "In-app Billing setup is failed: " + result);
+                } else {
+                    //success
+                    Log.d("###", "In-app Billing set up is OK!");
+                }
+            }
+        });
+
+        mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+            @Override
+            public void onIabPurchaseFinished(IabResult result, Purchase info) {
+                if (result.isFailure()) {
+                    //handle error
+                } else {
+                    if (info.getSku().equals(ITEM_SKU)) {
+                        //Open 10's & 20's minutes meditation
+                    }
+                }
+            }
+        };
+    }
+
+    protected void onBuyClick() {
+
+        mIabHelper.launchPurchaseFlow(this, ITEM_SKU, 1, mPurchaseFinishedListener);
     }
 
     /**
