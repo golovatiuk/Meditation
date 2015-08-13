@@ -14,7 +14,11 @@ import com.gotwingm.my.meditation.R;
 
 public class RemindersReceiver extends BroadcastReceiver {
 
+    private static final String TIME = "time";
+    private static final String STRING_EXTRA = "string extra";
+
     NotificationManager mNotificationManager;
+    int time;
 
     public RemindersReceiver() {
     }
@@ -23,6 +27,7 @@ public class RemindersReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        time = intent.getIntExtra(TIME, 1);
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification.Builder builder = new Notification.Builder(context);
@@ -33,7 +38,7 @@ public class RemindersReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true);
         builder.setContentIntent(PendingIntent.getActivity(context, 0,
                 new Intent(context, MainActivity.class).
-                        putExtra("string extra", "extra data"),
+                        putExtra(STRING_EXTRA, "extra data").putExtra(TIME, time),
                 0));
         Notification notification = builder.build();
         mNotificationManager.notify(0, notification);

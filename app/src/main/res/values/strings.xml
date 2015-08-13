@@ -29,6 +29,7 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
         <item>http://blog.ted.com/2013/01/11/4-scientific-studies-on-how-meditation-can-affect-your-heart-brain-and-creativity/</item>
         <item>http://www.rigpa.org/ndex.php?option=com_content&amp;view=article&amp;id=35\%%3Ascientific-research-on-meditation&amp;catid=63\%%3Aessential-teachings&amp;Itemid=154</item>
         <item>http://www.researchingmeditation.org/</item>
+        <item>http://www.roydahan.com/</item>
     </string-array>
 
     <string name="aboutLabel">More</string>
@@ -66,7 +67,6 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
     <string name="creditsProducer" translatable="false">Creator Producer: <b>Keren Yehezkely Goldstein</b></string>
     <string name="creditsGuidance" translatable="false">Meditation Guidance: <b>Prof. Jacob Raz</b></string>
     <string name="creditsDesign" translatable="false">Design: <b>Nadia Gorenstein Studio</b></string>
-    <string name="creditsDevelopment" translatable="false">Development: <b>Dan Caspi</b></string>
     <string name="creditsMusic" translatable="false">Music: <b>Roy Dahan</b></string>
 
     <string name="purchaseMeditationMessage">Enjoy meditating?\n\n

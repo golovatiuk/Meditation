@@ -107,6 +107,7 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
             case R.id.kidsR:
                 setMeditationTimerChooseButton(v);
+                timer = 5;
                 break;
 
             case R.id.day1:
@@ -177,10 +178,14 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
 
         mCalendar = new GregorianCalendar();
 
+        timer = 1;
+
         mHour = mCalendar.HOUR_OF_DAY;
         mMinute = mCalendar.MINUTE;
 
         ((ImageView)remindersView.findViewById(R.id.remindersKidIcon)).setImageResource(kidIconId);
+        remindersView.findViewById(R.id.min1R).setBackgroundResource(R.drawable.general_chosen_button_background);
+        mView = remindersView.findViewById(R.id.min1R);
 
         mainViewFlipper.addView(remindersView);
         mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_in));
@@ -256,13 +261,14 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
                         + mCalendar.get(Calendar.MINUTE);
 
                 alarmPendingIntent = PendingIntent.getBroadcast(context, 0,
-                        new Intent(context, RemindersReceiver.class).setAction(action),
+                        new Intent(context, RemindersReceiver.class).setAction(action).putExtra(TIME, timer),
                         PendingIntent.FLAG_CANCEL_CURRENT);
 
                 mAlarmManager.setRepeating(AlarmManager.RTC,
                         mCalendar.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, alarmPendingIntent);
 
                 values.put(ACTION, action);
+
                 db.insert(TABLE_NAME, null, values);
                 values.clear();
 

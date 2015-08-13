@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/englishSettingsButton"
                 android:src="@drawable/language_english"
-                android:background="@drawable/general_button_background"
+                android:background="@drawable/general_chosen_button_background"
                 android:layout_marginBottom="5dp"
                 android:onClick="onClick"/>
 
@@ -75,8 +75,8 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/alephSettingsButton"
-                android:src="@drawable/language_aleph"
+                android:id="@+id/hebrewSettingsButton"
+                android:src="@drawable/language_hebrew"
                 android:background="@drawable/general_button_background"
                 android:layout_marginBottom="5dp"
                 android:onClick="onClick"/>

@@ -64,10 +64,9 @@
             android:paddingBottom="10dp"
             android:id="@+id/linearLayout3"
             android:gravity="center"
-            android:layout_above="@+id/mainSettingsButton"
+            android:layout_below="@+id/imageView2"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="25dp">
+            android:layout_alignParentStart="true">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -220,5 +219,12 @@
             android:layout_alignParentStart="true">
 
         </ViewFlipper>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

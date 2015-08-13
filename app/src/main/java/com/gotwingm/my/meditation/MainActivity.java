@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -35,7 +36,6 @@ import java.util.Locale;
 import com.gotwingm.my.meditation.reminder.RemindersManager;
 import com.gotwingm.my.meditation.util.IabHelper;
 import com.gotwingm.my.meditation.util.IabResult;
-import com.gotwingm.my.meditation.util.Inventory;
 import com.gotwingm.my.meditation.util.Purchase;
 
 /**
@@ -45,6 +45,11 @@ import com.gotwingm.my.meditation.util.Purchase;
  * @author Nikolay Golovatiuk
  */
 public class MainActivity extends Activity implements View.OnClickListener, SurfaceHolder.Callback {
+
+    /** Location preference kay */
+    public static final String LOCATION_PREFERENCE_KAY = "local";
+
+    public static final String TIME = "time";
 
     /** Raw resources path for uri parse */
     public static final String RES_PATH = "android.resource://";
@@ -93,6 +98,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     /** About screen View */
     public static View aboutView;
 
+    /**Share view*/
+    public static View shareView;
+
     /** Reminders screen View */
     public static View remindersView;
 
@@ -102,6 +110,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     /** Meditation screen View */
     public static View meditationView;
 
+    /** Main view's settings bar */
     public static View mainSettingsBarView;
 
     /** Locale change view */
@@ -134,6 +143,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     private IabHelper mIabHelper;
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
+    /** Shared preferences */
+    public SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +160,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         timeOfADayUiChange();
         prepareBackgroundVideo();
 
+        mSharedPreferences = getSharedPreferences("locale", MODE_PRIVATE);
+
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
         layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         mainViewFlipper = (ViewFlipper) findViewById(R.id.mainViewFlipper);
@@ -157,6 +171,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         mainView = layoutInflater.inflate(R.layout.main_view, null);
         remindersView = layoutInflater.inflate(R.layout.reminders_view, null);
         meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
+        shareView = layoutInflater.inflate(R.layout.share_view, null);
 
         mRemindersManager = new RemindersManager();
         mAboutViewManager = new AboutViewManager();
@@ -165,7 +180,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         Intent intent = getIntent();
 
         if (!TextUtils.isEmpty(intent.getStringExtra(STRING_EXTRA))) {
-            makeMainView();
+            timer = intent.getIntExtra(TIME, 1);
+            mMeditationManger.makeMeditationView();
         } else {
             mAboutViewManager.makeAboutView();
         }
@@ -286,6 +302,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
             mMeditationManger.stopListening();
             mMeditationManger.isPlay = !mMeditationManger.isPlay;
             mMeditationManger.canReplay = true;
+            mMeditationManger.showReplayButton();
         }
 
         if (backgroundAudioPlayer.isPlaying()) {
@@ -339,21 +356,42 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
             case R.id.settingsInfoButton:
                 mAboutViewManager.makeAboutView();
+                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
+                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.settingsLanguageButton:
                 mainViewFlipper.addView(languageChangeView);
+                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
+                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
+
+                if (mSharedPreferences.contains(LOCATION_PREFERENCE_KAY)) {
+                    String local = mSharedPreferences.getString(LOCATION_PREFERENCE_KAY, "en");
+                    switch (local) {
+                        case "en":
+                            languageChangeView.findViewById(R.id.englishSettingsButton)
+                                    .setBackgroundResource(R.drawable.general_chosen_button_background);
+                            break;
+                        case "he":
+                            languageChangeView.findViewById(R.id.hebrewSettingsButton)
+                                    .setBackgroundResource(R.drawable.general_chosen_button_background);
+                            languageChangeView.findViewById(R.id.englishSettingsButton)
+                                    .setBackgroundResource(R.drawable.general_button_background);
+                            break;
+                    }
+                }
+
                 break;
 
             case R.id.englishSettingsButton:
                 changeLocation(v);
                 break;
 
-            case R.id.alephSettingsButton:
+            case R.id.hebrewSettingsButton:
                 changeLocation(v);
                 break;
 
@@ -363,14 +401,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.settingsShareButton:
-                mainViewFlipper.addView(layoutInflater.inflate(R.layout.share_view, null));
+                mainViewFlipper.addView(shareView);
+                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
+                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.shareCloseButton:
-                makeMainView();
-                mainViewFlipper.removeViewAt(0);
+                if (mainViewFlipper.getChildCount() == 2) {
+                    mainViewFlipper.showPrevious();
+                    mainViewFlipper.removeViewAt(1);
+                } else {
+                    makeMainView();
+                    mainViewFlipper.removeViewAt(0);
+                }
+
                 break;
 
             case R.id.facebookShareButton:
@@ -391,8 +437,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.browserCloseButton:
+                mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_out));
+                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_out));
                 mainViewFlipper.showPrevious();
                 mainViewFlipper.removeViewAt(1);
+                backgroundAudioPlayer.start();
                 break;
 
             case R.id.aboutViewCloseButton:
@@ -422,42 +471,37 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.meditationBackButton:
-                makeMainView();
-                mainViewFlipper.removeViewAt(0);
-                mMeditationManger.stop();
-                mMeditationManger.progressBarWork = false;
-                mMeditationManger.settingsBarLinearLayout.removeAllViews();
-
-                if (MeditationManger.secondMediaPlayer != null) {
-                    MeditationManger.secondMediaPlayer.stop();
-                    MeditationManger.secondMediaPlayer.release();
-                    MeditationManger.secondMediaPlayer = null;
-                }
+                onMeditationBack();
                 break;
 
             case R.id.min1:
                 timer = 1;
                 mMeditationManger.makeMeditationView();
+                mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.min5:
                 timer = 5;
                 mMeditationManger.makeMeditationView();
+                mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.min10:
                 timer = 10;
                 mMeditationManger.makeMeditationView();
+                mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.min20:
                 timer = 20;
                 mMeditationManger.makeMeditationView();
+                mainViewFlipper.removeViewAt(0);
                 break;
 
             case R.id.kids:
                 timer = 5;
                 mMeditationManger.makeMeditationView();
+                mainViewFlipper.removeViewAt(0);
                 break;
         }
     }
@@ -480,7 +524,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     }
 
-    protected void prepearPurchase() {
+    protected void preparePurchase() {
 
         String base64EncodedPublicKey = "";
 
@@ -605,7 +649,37 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     @Override
     public void onBackPressed() {
-        //Do nothing when Back button was pressed
+
+        if ((mainViewFlipper.getChildCount() == 2)
+//                && (mainViewFlipper.getChildAt(0).getId() == meditationView.getId())
+                ) {
+            mainViewFlipper.showPrevious();
+            mainViewFlipper.removeViewAt(1);
+        } else {
+            if (mainViewFlipper.getChildAt(0).getId() != mainView.getId()) {
+                if (mainViewFlipper.getChildAt(0).getId() == meditationView.getId()) {
+                    onMeditationBack();
+                } else {
+                    makeMainView();
+                    mainViewFlipper.removeViewAt(0);
+                    mAboutViewManager.aboutViewFlipper.removeAllViews();
+                }
+            }
+        }
+    }
+
+    private void onMeditationBack() {
+        makeMainView();
+        mainViewFlipper.removeViewAt(0);
+        mMeditationManger.stop();
+        mMeditationManger.progressBarWork = false;
+        mMeditationManger.settingsBarLinearLayout.removeAllViews();
+
+        if (MeditationManger.secondMediaPlayer != null) {
+            MeditationManger.secondMediaPlayer.stop();
+            MeditationManger.secondMediaPlayer.release();
+            MeditationManger.secondMediaPlayer = null;
+        }
     }
 
     /**
@@ -638,10 +712,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         switch (langButton.getId()) {
             case R.id.englishSettingsButton:
                 location = "en";
-                languageChangeView.findViewById(R.id.alephSettingsButton)
+                languageChangeView.findViewById(R.id.hebrewSettingsButton)
                         .setBackgroundResource(R.drawable.general_button_background);
                 break;
-            case R.id.alephSettingsButton:
+            case R.id.hebrewSettingsButton:
                 location = "he";
                 languageChangeView.findViewById(R.id.englishSettingsButton)
                         .setBackgroundResource(R.drawable.general_button_background);
@@ -650,13 +724,25 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         langButton.setBackgroundResource(R.drawable.general_chosen_button_background);
 
         locale = new Locale(location);
-        Locale.setDefault(locale);
-        configuration = new Configuration();
+        configuration = context.getResources().getConfiguration();
         configuration.locale = locale;
+        Locale.setDefault(locale);
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
-        onConfigurationChanged(configuration);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString(LOCATION_PREFERENCE_KAY, location);
+        editor.apply();
+
+//        reloadConfiguration();
     }
+
+    private void reloadConfiguration() {
+
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
 
     /**
      * Called by the system when the device configuration changes while your

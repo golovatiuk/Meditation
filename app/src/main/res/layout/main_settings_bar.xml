@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#48c79900">
+    android:background="#48c79900"
+    android:onClick="onClick">
 
     <LinearLayout
         android:orientation="horizontal"
