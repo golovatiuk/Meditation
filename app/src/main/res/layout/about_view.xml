@@ -16,7 +16,11 @@
         android:onClick="onClick"
         android:background="@drawable/general_button_background"
         android:src="@drawable/general_close_btt"
-        android:scaleType="fitCenter"/>
+        android:scaleType="fitCenter"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        />
 
     <ImageView
         android:layout_width="229dp"

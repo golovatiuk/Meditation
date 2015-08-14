@@ -126,13 +126,15 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                     isReplay = false;
                 }
 
-                if (canReplay) {
-                    showReplayButton();
-                }
-
                 if (isPlay) {
                     stopListening();
+                    if (canReplay) {
+                        showReplayButton();
+                    }
                 } else {
+                    if (canReplay) {
+                        hideReplayButton();
+                    }
                     startListening();
                 }
 

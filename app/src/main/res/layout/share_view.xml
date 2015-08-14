@@ -63,7 +63,9 @@
             android:ems="10"
             android:id="@+id/shareMessageEditText"
             android:layout_weight="1"
-            android:background="#ffffffff"/>
+            android:background="#ffffffff"
+            android:clickable="true"
+            android:focusableInTouchMode="true"/>
 
         <LinearLayout
             android:orientation="vertical"

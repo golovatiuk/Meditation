@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ViewFlipper;
@@ -47,7 +48,7 @@ import com.gotwingm.my.meditation.util.Purchase;
 public class MainActivity extends Activity implements View.OnClickListener, SurfaceHolder.Callback {
 
     /** Location preference kay */
-    public static final String LOCATION_PREFERENCE_KAY = "local";
+    public static final String LOCATION_PREFERENCE_KEY = "local";
 
     public static final String TIME = "time";
 
@@ -143,6 +144,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     private IabHelper mIabHelper;
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
+    private boolean isPaused;
+
     /** Shared preferences */
     public SharedPreferences mSharedPreferences;
 
@@ -157,9 +160,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         context = MainActivity.this;
-        timeOfADayUiChange();
-        prepareBackgroundVideo();
-
+        isPaused = false;
         mSharedPreferences = getSharedPreferences("locale", MODE_PRIVATE);
 
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
@@ -298,6 +299,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("###", "onPause");
+        isPaused = true;
         if(mMeditationManger.isPlay) {
             mMeditationManger.stopListening();
             mMeditationManger.isPlay = !mMeditationManger.isPlay;
@@ -306,18 +309,37 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         }
 
         if (backgroundAudioPlayer.isPlaying()) {
-            backgroundAudioPlayer.stop();
-            backgroundAudioPlayer.release();
-            backgroundAudioPlayer = null;
+            backgroundAudioPlayer.pause();
         }
+    }
 
-        if (backgroundVideoPlayer.isPlaying()) {
-            backgroundVideoPlayer.stop();
-            backgroundVideoPlayer.release();
-            backgroundVideoPlayer = null;
-            mSurfaceHolder.removeCallback(this);
-            mSurfaceHolder = null;
-        }
+    /**
+     * Called when you are no longer visible to the user.  You will next
+     * receive either {@link #onRestart}, {@link #onDestroy}, or nothing,
+     * depending on later user activity.
+     * <p/>
+     * <p>Note that this method may never be called, in low memory situations
+     * where the system does not have enough memory to keep your activity's
+     * process running after its {@link #onPause} method is called.
+     * <p/>
+     * <p><em>Derived classes must call through to the super class's
+     * implementation of this method.  If they do not, an exception will be
+     * thrown.</em></p>
+     *
+     * @see #onRestart
+     * @see #onResume
+     * @see #onSaveInstanceState
+     * @see #onDestroy
+     */
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("###", "onStop");
+        backgroundAudioPlayer.release();
+        backgroundAudioPlayer = null;
+        backgroundVideoPlayer.release();
+        backgroundVideoPlayer = null;
+        isPaused = false;
     }
 
     /**
@@ -342,16 +364,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     @Override
     protected void onResume() {
+        Log.d("###", "onResume");
         super.onResume();
         timeOfADayUiChange();
-        prepareBackgroundVideo();
+        if (isPaused) {
+            backgroundAudioPlayer.start();
+        } else {
+            prepareBackgroundPlayers();
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mainRelativeLayout:
-                settingsFlipper.removeAllViews();
+                if (settingsFlipper.getChildCount() == 1) {
+                    settingsFlipper.removeAllViews();
+                }
                 break;
 
             case R.id.settingsInfoButton:
@@ -369,8 +398,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
 
-                if (mSharedPreferences.contains(LOCATION_PREFERENCE_KAY)) {
-                    String local = mSharedPreferences.getString(LOCATION_PREFERENCE_KAY, "en");
+                if (mSharedPreferences.contains(LOCATION_PREFERENCE_KEY)) {
+                    String local = mSharedPreferences.getString(LOCATION_PREFERENCE_KEY, "en");
                     switch (local) {
                         case "en":
                             languageChangeView.findViewById(R.id.englishSettingsButton)
@@ -406,6 +435,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
                 mainViewFlipper.showNext();
                 mainViewFlipper.removeViewAt(0);
+                shareView.findViewById(R.id.shareMessageEditText)
+                        .setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (!hasFocus) {
+                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                    inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                }
+                            }
+                        });
                 break;
 
             case R.id.shareCloseButton:
@@ -611,40 +650,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     }
 
     /**
-     * Generate background video & audio MediaPlayer
-     * Set video player to background SurfaceView
-     */
-    private void prepareBackgroundVideo() {
-
-        Uri videoUri;
-        Uri audioUri;
-        SurfaceView surfaceView;
-        DisplayMetrics displayMetrics;
-
-        displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        surfaceView = (SurfaceView) findViewById(R.id.backgroundVideoSurface);
-        mSurfaceHolder = surfaceView.getHolder();
-        mSurfaceHolder.setFixedSize(displayMetrics.widthPixels, displayMetrics.heightPixels);
-        mSurfaceHolder.addCallback(this);
-
-        videoUri = Uri.parse(RES_PATH + getPackageName() + DIR_SEPARATOR + videoId);
-        audioUri = Uri.parse(RES_PATH + getPackageName() + DIR_SEPARATOR + R.raw.sea);
-
-        backgroundAudioPlayer = new MediaPlayer();
-        backgroundVideoPlayer = new MediaPlayer();
-        try {
-            backgroundVideoPlayer.setDataSource(context, videoUri);
-            backgroundVideoPlayer.setLooping(true);
-            backgroundAudioPlayer.setDataSource(context, audioUri);
-            backgroundAudioPlayer.setLooping(true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Back button's press handler
      */
     @Override
@@ -682,11 +687,39 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         }
     }
 
+    private void prepareBackgroundPlayers() {
+        Uri videoUri;
+        Uri audioUri;
+        SurfaceView surfaceView;
+        DisplayMetrics displayMetrics;
+
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        surfaceView = (SurfaceView) findViewById(R.id.backgroundVideoSurface);
+        mSurfaceHolder = surfaceView.getHolder();
+        mSurfaceHolder.setFixedSize(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        mSurfaceHolder.addCallback(this);
+
+        videoUri = Uri.parse(RES_PATH + getPackageName() + DIR_SEPARATOR + videoId);
+        audioUri = Uri.parse(RES_PATH + getPackageName() + DIR_SEPARATOR + R.raw.sea);
+
+        backgroundAudioPlayer = new MediaPlayer();
+        backgroundVideoPlayer = new MediaPlayer();
+        try {
+            backgroundVideoPlayer.setDataSource(context, videoUri);
+            backgroundVideoPlayer.setLooping(true);
+            backgroundAudioPlayer.setDataSource(context, audioUri);
+            backgroundAudioPlayer.setLooping(true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Start to play background video & audio MediaPlayer
      */
     private void startBackgroundVideo() {
-
         try {
             backgroundVideoPlayer.setDisplay(mSurfaceHolder);
             backgroundVideoPlayer.prepare();
@@ -730,19 +763,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(LOCATION_PREFERENCE_KAY, location);
+        editor.putString(LOCATION_PREFERENCE_KEY, location);
         editor.apply();
 
 //        reloadConfiguration();
     }
-
-    private void reloadConfiguration() {
-
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
 
     /**
      * Called by the system when the device configuration changes while your

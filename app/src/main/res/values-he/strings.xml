@@ -55,5 +55,9 @@
     <string name="purchaseButton">לחצו כאן לרכישה</string>
     <string name="restorePurchaseButton">רכשתם בעבר?</string>
     <string name="backButtonLabel">חזרה</string>
+    <string name="confirmReminders">אישור</string>
+    <string name="remindersSet">התזכורות נשמרו</string>
+    <string name="cancelAll">בטל הכל</string>
+    <string name="remindersCanceled">כל התזכורות בוטלו</string>
 
 </resources>

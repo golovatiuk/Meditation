@@ -55,6 +55,10 @@ We recommend sitting comfortably, preferably on a cushion or pillow so your knee
     <string name="day5">Th</string>
     <string name="day6">F</string>
     <string name="day7">Sa</string>
+    <string name="confirmReminders">OK</string>
+    <string name="remindersSet">Reminders Set</string>
+    <string name="cancelAll">Cancel All</string>
+    <string name="remindersCanceled">All reminders were canceled</string>
 
     <string name="sounds">Sounds</string>
     <string name="guidance">Guidance</string>
