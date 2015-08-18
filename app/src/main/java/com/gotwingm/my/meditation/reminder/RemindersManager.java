@@ -62,23 +62,6 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
         timer = 1;
         daysPicked = new boolean[7];
         mAlarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-
-        remindersView.findViewById(R.id.min1R).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.min5R).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.min10R).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.min20R).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.kidsR).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day1).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day2).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day3).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day4).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day5).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day6).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.day7).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.cancelRemindersButton).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.okRemindersButton).setOnClickListener(RemindersManager.this);
-        remindersView.findViewById(R.id.remindersTimePickerButton).setOnClickListener(RemindersManager.this);
-
     }
 
     @Override
@@ -288,6 +271,22 @@ public class RemindersManager extends MainActivity implements View.OnClickListen
         mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_next_out));
         mainViewFlipper.showNext();
         mainViewFlipper.removeViewAt(0);
+
+        remindersView.findViewById(R.id.min1R).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.min5R).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.min10R).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.min20R).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.kidsR).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day1).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day2).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day3).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day4).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day5).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day6).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.day7).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.cancelRemindersButton).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.okRemindersButton).setOnClickListener(RemindersManager.this);
+        remindersView.findViewById(R.id.remindersTimePickerButton).setOnClickListener(RemindersManager.this);
     }
 
     private void readRemindersFromDB() {

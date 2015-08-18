@@ -22,24 +22,6 @@ public class AboutViewManager extends MainActivity implements View.OnClickListen
     private View creditsView;
 
     AboutViewManager() {
-
-        aboutViewFlipper = (ViewFlipper) aboutView.findViewById(R.id.aboutViewFlipper);
-        linksView = layoutInflater.inflate(R.layout.about_links, null);
-        textView = layoutInflater.inflate(R.layout.about_text, null);
-        creditsView = layoutInflater.inflate(R.layout.about_credits, null);
-
-        linksView.findViewById(R.id.link0).setOnClickListener(AboutViewManager.this);
-        linksView.findViewById(R.id.link1).setOnClickListener(AboutViewManager.this);
-        linksView.findViewById(R.id.link2).setOnClickListener(AboutViewManager.this);
-        linksView.findViewById(R.id.link3).setOnClickListener(AboutViewManager.this);
-        linksView.findViewById(R.id.link4).setOnClickListener(AboutViewManager.this);
-        linksView.findViewById(R.id.link5).setOnClickListener(AboutViewManager.this);
-
-        creditsView.findViewById(R.id.producer).setOnClickListener(AboutViewManager.this);
-        creditsView.findViewById(R.id.meditationGuidance).setOnClickListener(AboutViewManager.this);
-        creditsView.findViewById(R.id.design).setOnClickListener(AboutViewManager.this);
-        creditsView.findViewById(R.id.music).setOnClickListener(AboutViewManager.this);
-
     }
 
     @Override
@@ -92,11 +74,31 @@ public class AboutViewManager extends MainActivity implements View.OnClickListen
     }
 
     public void makeAboutView() {
+
+        aboutView = layoutInflater.inflate(R.layout.about_view, null);
+
+        aboutViewFlipper = (ViewFlipper) aboutView.findViewById(R.id.aboutViewFlipper);
+        linksView = layoutInflater.inflate(R.layout.about_links, null);
+        textView = layoutInflater.inflate(R.layout.about_text, null);
+        creditsView = layoutInflater.inflate(R.layout.about_credits, null);
+
         mainViewFlipper.addView(aboutView);
         aboutViewFlipper.addView(textView);
         aboutViewFlipper.addView(linksView);
         aboutViewFlipper.addView(creditsView);
         aboutViewFlipper.setOnTouchListener(AboutViewManager.this);
+
+        linksView.findViewById(R.id.link0).setOnClickListener(AboutViewManager.this);
+        linksView.findViewById(R.id.link1).setOnClickListener(AboutViewManager.this);
+        linksView.findViewById(R.id.link2).setOnClickListener(AboutViewManager.this);
+        linksView.findViewById(R.id.link3).setOnClickListener(AboutViewManager.this);
+        linksView.findViewById(R.id.link4).setOnClickListener(AboutViewManager.this);
+        linksView.findViewById(R.id.link5).setOnClickListener(AboutViewManager.this);
+
+        creditsView.findViewById(R.id.producer).setOnClickListener(AboutViewManager.this);
+        creditsView.findViewById(R.id.meditationGuidance).setOnClickListener(AboutViewManager.this);
+        creditsView.findViewById(R.id.design).setOnClickListener(AboutViewManager.this);
+        creditsView.findViewById(R.id.music).setOnClickListener(AboutViewManager.this);
 
     }
 

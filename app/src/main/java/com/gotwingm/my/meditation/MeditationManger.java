@@ -8,14 +8,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
+
+import static android.widget.RelativeLayout.*;
 
 /**
  *
@@ -80,13 +84,11 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
 //                    melodyButton.setBackgroundResource(R.drawable.general_button_background);
                 }
 
-                if (mainMediaPlayer != null) {
-                    if (isPlay) {
-                        mainMediaPlayer.start();
-                        mainMediaPlayer.seekTo(MPPosition);
-                    }
+                if (mainMediaPlayer != null && isPlay) {
+                    mainMediaPlayer.start();
+                    mainMediaPlayer.seekTo(MPPosition);
                 } else {
-                    play();
+//                    play();
                 }
                 openSettBar();
                 break;
@@ -102,9 +104,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 break;
 
             case R.id.meditationSettSubBarMusicButton:
-
                 onMelodyChooseButtonClick(v);
-
                 break;
 
             case R.id.meditationSettSubBarMusic2Button:
@@ -147,6 +147,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
                 break;
 
             case R.id.meditationShareButton:
+                shareView = layoutInflater.inflate(R.layout.share_view, null);
                 mainViewFlipper.addView(shareView);
                 mainViewFlipper.showNext();
 //                mainViewFlipper.removeViewAt(0);
@@ -172,6 +173,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         mHandler = myHandler();
         MPPosition = 0;
 
+        meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
         meditationVolumeBar = layoutInflater.inflate(R.layout.volume_bar, null);
         meditationSettingsBar = layoutInflater.inflate(R.layout.meditation_settings_bar, null);
 
@@ -216,6 +218,8 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
             mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
             mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
             mainViewFlipper.showNext();
+            ((TextView) meditationView.findViewById(R.id.listeningTextView)).setText(R.string.FiveMinutesMeditationTitle);
+            ((TextView) meditationView.findViewById(R.id.meditationBackButtonTV)).setText(R.string.backButtonLabel);
 
             playButton.setBackgroundResource(playImageId);
             hideReplayButton();
@@ -232,17 +236,15 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         mainViewFlipper.showNext();
 
         for (int i = 0; i < 5; i++) {
-            ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout)).removeViewAt(2);
+            ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout)).removeViewAt(3);
         }
 
         purchaseView = layoutInflater.inflate(R.layout.purchase_view, null);
-
         ((RelativeLayout) meditationView.findViewById(R.id.meditationRelativeLayout)).addView(purchaseView);
 
 //        purchaseView.findViewById(R.id.purchaseButton).setOnClickListener(MeditationManger.this);
 //        purchaseView.findViewById(R.id.restorePurchaseButton).setOnClickListener(MeditationManger.this);
 
-        meditationView.findViewById(R.id.mainSettingsButton).setOnClickListener(MeditationManger.this);
         meditationView.findViewById(R.id.mainSettingsButton).setEnabled(false);
     }
 
@@ -314,6 +316,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
     private void setMelodyButton(View v) {
 
         if (melodyButton != null) {
+            melodyButton.setEnabled(true);
             meditationSettingsSubBar.findViewById(melodyButton.getId()).setBackgroundResource(R.drawable.general_button_background);
         }
 
@@ -550,6 +553,7 @@ public class MeditationManger extends MainActivity implements View.OnClickListen
         setMelodyButton(v);
         secondMelodyPrepare();
         secondMediaPlayerStart();
+        v.setEnabled(false);
     }
 
     private void onReplayButtonClick() {

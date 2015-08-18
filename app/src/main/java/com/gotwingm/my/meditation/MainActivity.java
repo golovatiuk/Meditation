@@ -63,6 +63,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     public static final String ITEM_SKU = "meditation.purchase";
 
+    public static final String ENGLISH_LANGUAGE = "en";
+
+    public static final String HEBREW_LANGUAGE = "iw";
+
     /** Duration of meditation */
     public static int timer;
 
@@ -86,9 +90,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     /** Background audio's MediaPlayer */
     public static MediaPlayer backgroundAudioPlayer;
-
-    /** MainActivity View with background video's SurfaceHolder */
-    public static View activityMain;
 
     /** MainActivity's ViewFlipper */
     public static ViewFlipper mainViewFlipper;
@@ -142,9 +143,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     private SurfaceHolder mSurfaceHolder;
 
     private IabHelper mIabHelper;
+
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 
     private boolean isPaused;
+
+    private Locale locale;
 
     /** Shared preferences */
     public SharedPreferences mSharedPreferences;
@@ -160,19 +164,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         context = MainActivity.this;
+        locale = null;
         isPaused = false;
         mSharedPreferences = getSharedPreferences("locale", MODE_PRIVATE);
+        if (mSharedPreferences.contains(LOCATION_PREFERENCE_KEY)) {
+            setLocation(mSharedPreferences.getString(LOCATION_PREFERENCE_KEY, ENGLISH_LANGUAGE));
+        }
 
         audioManager = (AudioManager) context.getSystemService(AUDIO_SERVICE);
         layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         mainViewFlipper = (ViewFlipper) findViewById(R.id.mainViewFlipper);
 
-        activityMain = layoutInflater.inflate(R.layout.activity_main, null);
-        aboutView = layoutInflater.inflate(R.layout.about_view, null);
         mainView = layoutInflater.inflate(R.layout.main_view, null);
-        remindersView = layoutInflater.inflate(R.layout.reminders_view, null);
-        meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
-        shareView = layoutInflater.inflate(R.layout.share_view, null);
 
         mRemindersManager = new RemindersManager();
         mAboutViewManager = new AboutViewManager();
@@ -299,7 +302,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("###", "onPause");
         isPaused = true;
         if(mMeditationManger.isPlay) {
             mMeditationManger.stopListening();
@@ -334,11 +336,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("###", "onStop");
-        backgroundAudioPlayer.release();
-        backgroundAudioPlayer = null;
-        backgroundVideoPlayer.release();
-        backgroundVideoPlayer = null;
         isPaused = false;
     }
 
@@ -364,7 +361,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     @Override
     protected void onResume() {
-        Log.d("###", "onResume");
         super.onResume();
         timeOfADayUiChange();
         if (isPaused) {
@@ -378,7 +374,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mainRelativeLayout:
-                if (settingsFlipper.getChildCount() == 1) {
+                if (settingsFlipper != null && settingsFlipper.getChildCount() == 1) {
                     settingsFlipper.removeAllViews();
                 }
                 break;
@@ -392,6 +388,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.settingsLanguageButton:
+                languageChangeView = layoutInflater.inflate(R.layout.settings_language_view, null);
                 mainViewFlipper.addView(languageChangeView);
                 mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
                 mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
@@ -399,13 +396,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 mainViewFlipper.removeViewAt(0);
 
                 if (mSharedPreferences.contains(LOCATION_PREFERENCE_KEY)) {
-                    String local = mSharedPreferences.getString(LOCATION_PREFERENCE_KEY, "en");
+                    String local = mSharedPreferences.getString(LOCATION_PREFERENCE_KEY, ENGLISH_LANGUAGE);
                     switch (local) {
-                        case "en":
+                        case ENGLISH_LANGUAGE:
                             languageChangeView.findViewById(R.id.englishSettingsButton)
                                     .setBackgroundResource(R.drawable.general_chosen_button_background);
                             break;
-                        case "he":
+                        case HEBREW_LANGUAGE:
                             languageChangeView.findViewById(R.id.hebrewSettingsButton)
                                     .setBackgroundResource(R.drawable.general_chosen_button_background);
                             languageChangeView.findViewById(R.id.englishSettingsButton)
@@ -417,11 +414,19 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.englishSettingsButton:
-                changeLocation(v);
+                languageChangeView.findViewById(R.id.hebrewSettingsButton)
+                        .setBackgroundResource(R.drawable.general_button_background);
+                languageChangeView.findViewById(R.id.englishSettingsButton)
+                        .setBackgroundResource(R.drawable.general_chosen_button_background);
+                setLocation(ENGLISH_LANGUAGE);
                 break;
 
             case R.id.hebrewSettingsButton:
-                changeLocation(v);
+                languageChangeView.findViewById(R.id.englishSettingsButton)
+                        .setBackgroundResource(R.drawable.general_button_background);
+                languageChangeView.findViewById(R.id.hebrewSettingsButton)
+                        .setBackgroundResource(R.drawable.general_chosen_button_background);
+                setLocation(HEBREW_LANGUAGE);
                 break;
 
             case R.id.settingsLanguageCloseButton:
@@ -430,6 +435,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.settingsShareButton:
+                shareView = layoutInflater.inflate(R.layout.share_view, null);
                 mainViewFlipper.addView(shareView);
                 mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_in));
                 mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.go_prev_out));
@@ -440,7 +446,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
                                 if (!hasFocus) {
-                                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                                    InputMethodManager inputMethodManager = (InputMethodManager)
+                                            getSystemService(Activity.INPUT_METHOD_SERVICE);
                                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                                 }
                             }
@@ -467,6 +474,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 break;
 
             case R.id.settingsRemindersButton:
+                remindersView = layoutInflater.inflate(R.layout.reminders_view, null);
                 mRemindersManager.makeRemindersView();
                 break;
 
@@ -477,7 +485,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
             case R.id.browserCloseButton:
                 mainViewFlipper.setOutAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_out));
-                mainViewFlipper.setInAnimation(AnimationUtils.loadAnimation(context, R.anim.sett_bar_out));
                 mainViewFlipper.showPrevious();
                 mainViewFlipper.removeViewAt(1);
                 backgroundAudioPlayer.start();
@@ -501,7 +508,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                 finish();
 
             case R.id.mainSettingsButton:
-                languageChangeView = layoutInflater.inflate(R.layout.settings_language_view, null);
                 mainSettingsBarView = layoutInflater.inflate(R.layout.main_settings_bar, null);
                 settingsFlipper = (ViewFlipper) findViewById(R.id.settingsFlipper);
                 settingsFlipper.addView(mainSettingsBarView);
@@ -550,7 +556,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     public void makeMainView() {
 
-        meditationView = layoutInflater.inflate(R.layout.meditation_view, null);
+
         View mainView = layoutInflater.inflate(R.layout.main_view, null);
         ((ImageView) mainView.findViewById(R.id.mainSunImage)).setImageResource(sunIconId);
         mainView.findViewById(R.id.mainBackButtonSunImage).setBackgroundResource(sunIconId);
@@ -608,15 +614,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
      */
     private void share (int id) {
 
-        final String FACEBOOK_LAUNCHER = "com.facebook.katana";
+        final String FACEBOOK_LAUNCHER = "com.facebook";
         final String TWITTER_LAUNCHER = "com.twitter.android.PostActivity";
+        boolean shareSuccess = false;
 
         ComponentName componentName;
         String text = ((EditText) findViewById(R.id.shareMessageEditText)).getText().toString();
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        List<ResolveInfo> activitiesList = getPackageManager().queryIntentActivities(shareIntent, 0);
-
         shareIntent.setType("text/plain");
+        List<ResolveInfo> activitiesList = context.getPackageManager().queryIntentActivities(shareIntent, 0);
+
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
 
@@ -628,10 +635,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                         shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                         shareIntent.setComponent(componentName);
                         startActivity(shareIntent);
+                        shareSuccess = true;
                         break;
                     }
                 }
-                shareAlertDialog();
+                if (!shareSuccess) {
+                    shareAlertDialog();
+                }
                 break;
 
             case R.id.twitterShareButton:
@@ -641,10 +651,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
                         shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
                         shareIntent.setComponent(componentName);
                         startActivity(shareIntent);
+                        shareSuccess = true;
                         break;
                     }
                 }
-                shareAlertDialog();
+                if (!shareSuccess) {
+                    shareAlertDialog();
+                }
                 break;
         }
     }
@@ -662,7 +675,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
             mainViewFlipper.removeViewAt(1);
         } else {
             if (mainViewFlipper.getChildAt(0).getId() != mainView.getId()) {
-                if (mainViewFlipper.getChildAt(0).getId() == meditationView.getId()) {
+                if (meditationView != null && mainViewFlipper.getChildAt(0).getId() == meditationView.getId()) {
                     onMeditationBack();
                 } else {
                     makeMainView();
@@ -731,42 +744,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
         }
     }
 
-    /**
-     * Location chang's method
-     *
-     * @param langButton which location chang's button clicked
-     */
-    private void changeLocation(View langButton) {
-
-        String location = null;
-        Locale locale;
+    private void setLocation(String lang) {
         Configuration configuration;
+        DisplayMetrics metrics;
 
-        switch (langButton.getId()) {
-            case R.id.englishSettingsButton:
-                location = "en";
-                languageChangeView.findViewById(R.id.hebrewSettingsButton)
-                        .setBackgroundResource(R.drawable.general_button_background);
-                break;
-            case R.id.hebrewSettingsButton:
-                location = "he";
-                languageChangeView.findViewById(R.id.englishSettingsButton)
-                        .setBackgroundResource(R.drawable.general_button_background);
-                break;
-        }
-        langButton.setBackgroundResource(R.drawable.general_chosen_button_background);
-
-        locale = new Locale(location);
-        configuration = context.getResources().getConfiguration();
+        metrics = getBaseContext().getResources().getDisplayMetrics();
+        locale = new Locale(lang);
+        configuration = getBaseContext().getResources().getConfiguration();
         configuration.locale = locale;
         Locale.setDefault(locale);
-        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+        getBaseContext().getResources().updateConfiguration(configuration, metrics);
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(LOCATION_PREFERENCE_KEY, location);
+        editor.putString(LOCATION_PREFERENCE_KEY, lang);
         editor.apply();
-
-//        reloadConfiguration();
     }
 
     /**
@@ -788,6 +779,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
+        if (locale != null) {
+
+            newConfig.locale = locale;
+
+            Locale.setDefault(locale);
+
+            getBaseContext().getResources().updateConfiguration(newConfig,
+
+                    getBaseContext().getResources().getDisplayMetrics());
+
+        }
     }
 
     /**
@@ -854,5 +857,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Surf
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        backgroundAudioPlayer.release();
+        backgroundAudioPlayer = null;
+        backgroundVideoPlayer.release();
+        backgroundVideoPlayer = null;
     }
 }

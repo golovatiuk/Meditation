@@ -3,8 +3,8 @@
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/meditationRelativeLayout">
 
         <RelativeLayout
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backButtonLabel"
-                android:id="@+id/textView17"
+                android:id="@+id/meditationBackButtonTV"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true" />
         </RelativeLayout>
@@ -43,6 +43,14 @@
             android:layout_marginBottom="25dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"/>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/purchaseFL">
+    </FrameLayout>
 
     <ImageButton
             android:layout_width="55dp"
@@ -57,12 +65,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listeningTextView"
-            android:text="Listening"
+            android:text="@string/FiveMinutesMeditationTitle"
             android:textSize="28dp"
             android:textColor="#ff000000"
             android:layout_below="@+id/progressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"/>
+            android:layout_centerHorizontal="true"/>
 
         <ImageView
             android:layout_width="45dp"
